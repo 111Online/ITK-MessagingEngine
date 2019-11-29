@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:context="http://www.springframework.org/schema/context" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+
+    <!-- <context:property-placeholder location="classpath:configtest.properties"/> -->
+    <flow name="TestDos" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="testDosGetEndpointStatus" doc:name="VMTestDos"/>
+        <flow-ref name="query_dos_getEndpointStatus" doc:name="dos_getEndpointStatus"/>
+    </flow>
+
+    <flow name="TestAuthentication" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="testAuthentication" doc:name="VM"/>
+        <flow-ref name="AuthenticateRequest" doc:name="Flow Reference"/>
+    </flow>
+
+    <flow name="TestProcessMessage" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="testProcessMessage" doc:name="VM"/>
+        <flow-ref name="ProcessMessage" doc:name="Flow Reference"/>
+    </flow>
+    <flow name="TestDiagnosis" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="diagnostics" doc:name="VM"/>
+        <flow-ref name="diagnosticsFlowMain" doc:name="diagnosticsFlowMain"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+    </flow>
+   
+</mule>

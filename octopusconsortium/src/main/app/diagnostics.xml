@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:spring="http://www.springframework.org/schema/beans"
+    xmlns:http="http://www.mulesoft.org/schema/mule/http"
+    xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
+    xmlns:ss="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.1/mule-http.xsd
+http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/schema/mule/spring-security/3.1/mule-spring-security.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd" version="CE-3.4.0">
+  
+ 	<!-- 
+    <mule-ss:security-manager>
+        <mule-ss:delegate-security-provider name="memory-provider" delegate-ref="mainauthenticationManager" />
+    </mule-ss:security-manager>
+  
+    <spring:beans>
+      <ss:authentication-manager alias="authenticationManager">
+        <ss:authentication-provider>
+          <ss:user-service id="userService">
+            <ss:user name="diagUser" password="password" authorities="ROLE_USER" />
+            <ss:user name="admin" password="password1" authorities="ROLE_ADMIN" />
+          </ss:user-service>
+        </ss:authentication-provider>
+      </ss:authentication-manager> 
+    </spring:beans>
+     -->
+     
+     
+    <flow name="diagnosticsFlow1" doc:name="diagnosticsFlow1">
+    
+        <http:inbound-endpoint exchange-pattern="request-response" host="${application.diag.host}" port="${application.diag.port}" path="${application.diag.path}"  doc:name="HTTP">
+        	<mule-ss:http-security-filter realm="MessageEngine"  />
+        </http:inbound-endpoint>
+        <http:body-to-parameter-map-transformer doc:name="Body to Parameter Map"/>
+        <set-variable variableName="prams" value="#[payload]" doc:name="Variable"/>
+        <logger message="isToggle = #[flowVars['prams']['oohToggle']]" level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload['oohToggle'] != null and payload['oohToggle'] ==  'true']">
+                <logger message="Toggle = true" level="INFO" doc:name="toggle"/>
+                <scripting:transformer doc:name="Groovy">
+                    <scripting:script engine="Groovy"><![CDATA[org.mule.transport.jdbc.JdbcConnector jdbcConnector = (org.mule.transport.jdbc.JdbcConnector) muleContext.getRegistry().lookupConnector("JDBC");
+javax.sql.DataSource datasource = (javax.sql.DataSource) jdbcConnector.getDataSource();
+java.sql.Connection connection;
+		
+
+	connection = (java.sql.Connection) datasource.getConnection();
+	String insertquery="UPDATE oohschedule SET Name = ( CASE WHEN PATINDEX ('%Disabled%',Name)> 0 THEN REPLACE ( Name , 'Disabled' , '' ) ELSE Name + 'Disabled' END )";
+	java.sql.Statement stmt = connection.prepareStatement(insertquery);
+	stmt.executeUpdate();	
+]]></scripting:script>
+                </scripting:transformer>
+            </when>
+            <otherwise>
+                <logger message="Toggle = false" level="INFO" doc:name="Logger"/>
+            </otherwise>
+        </choice>
+        <flow-ref name="diagnosticsFlowMain" doc:name="diagnosticsFlowMain"/>
+         
+    </flow>
+    <sub-flow name="diagnosticsFlowMain" doc:name="diagnosticsFlowMain">
+    
+        <logger message="diag operation called. messageid = #[message.id] ipaddress = #[groovy:message.getProperty(org.mule.api.config.MuleProperties.MULE_REMOTE_CLIENT_ADDRESS, org.mule.api.transport.PropertyScope.INBOUND)]" level="INFO" doc:name="start"/>
+        <scripting:transformer doc:name="Create Status Array">
+            <scripting:script engine="Groovy"><![CDATA[def m = new String[6];
+m[0]="unknown";
+m[1]="unknown";
+m[2]="unknown";
+m[3]="unknown";
+m[4]="unknown";
+m[5]="unknown";
+
+payload = m;
+]]></scripting:script>
+        </scripting:transformer>
+        <enricher target="#[payload[0]]" doc:name="Message Enricher">
+            <flow-ref name="Check_Adastra" doc:name="Check Adastra"/>
+        </enricher>
+        <enricher target="#[payload[1]]" doc:name="Message Enricher">
+            <flow-ref name="Check_Dos" doc:name="Check Pathways DOS"/>
+        </enricher>
+        <enricher target="#[payload[2]]" doc:name="Message Enricher">
+            <flow-ref name="Check_Choices_DOS" doc:name="Check Choices DOS"/>
+        </enricher>
+        <enricher target="#[payload[3]]" doc:name="Message Enricher">
+            <flow-ref name="Check_PDS" doc:name="Check PDS"/>
+        </enricher>
+        <enricher target="#[payload[4]]" doc:name="Message Enricher">
+            <flow-ref name="Check_DB" doc:name="Check DB"/>
+        </enricher>
+        <enricher doc:name="Message Enricher" target="#[payload[5]]">
+            <flow-ref name="Check_IsOOHDisabled" doc:name="Check IsOOHDisabled "/>
+        </enricher>
+        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="xsl/diagnostics.xsl" doc:name="XSLT" doc:description="read the response and convert to extract response">
+        	<mulexml:context-property key="OohToggle" value="#[header:INBOUND:http.request]"/>            
+        </mulexml:xslt-transformer>
+        <message-properties-transformer doc:name="Message Properties">
+            <add-message-property key="Content-Type" value="text/html"/>
+        </message-properties-transformer>
+         
+    </sub-flow>
+    <flow name="Check_DB" doc:name="Check_DB">
+    
+        <set-payload value="test" doc:name="Set Payload"/>
+        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="testCache" queryTimeout="-1" connector-ref="JDBC" doc:name="Check CacheBlob table">
+            <jdbc:query key="testCache" value="select top(1) * from CacheBlob"/>
+        </jdbc:outbound-endpoint>
+        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="OOH" queryTimeout="-1" connector-ref="JDBC" doc:name="Check OOHSchedule table">
+            <jdbc:query key="OOH" value="select top(1) * from OOHSchedule"/>
+        </jdbc:outbound-endpoint>
+        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="BankHols" queryTimeout="-1" connector-ref="JDBC" doc:name="Check Bankholiday table">
+            <jdbc:query key="BankHols" value="select top(1) * from BankHolidays"/>
+        </jdbc:outbound-endpoint>
+        <set-payload value="Database Service - Responding" doc:name="Set Payload"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <scripting:transformer doc:name="setPayload">
+                <scripting:script engine="Groovy"><![CDATA[def exception = (Exception)message.getExceptionPayload().getRootException();
+payload = "Database service test failed and resulted in an error! \n" + exception.getMessage();]]></scripting:script>
+            </scripting:transformer>
+        </catch-exception-strategy>
+         
+    </flow>
+    <flow name="Check_Adastra" doc:name="Check_Adastra">
+        <choice doc:name="Choice">
+            <when expression="'${services.callqueuecallback.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.callqueuecallback.endpoint.host}" port="${services.callqueuecallback.endpoint.port}" path="${services.callqueuecallback.endpoint.path}" method="GET" doc:name="HTTP"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <https:outbound-endpoint exchange-pattern="request-response" host="${services.callqueuecallback.endpoint.host}" port="${services.callqueuecallback.endpoint.port}" path="${services.callqueuecallback.endpoint.path}" method="GET" connector-ref="HTTP_HTTPS_Pathways" doc:name="HTTPS"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <logger message="#[message.inboundProperties['http.status']]" level="DEBUG" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties['http.status'].startsWith('200')]">
+                <set-payload value="Adastra Service  - Responding" doc:name="Set Payload Success"/>
+            </when>
+            <otherwise>
+                <set-payload value="Adastra Service - Failed - http GET request status #[message.inboundProperties['http.status']] expected  200 " doc:name="Set Payload"/>
+            </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">            
+            <scripting:transformer doc:name="setPayload">
+                <scripting:script engine="Groovy"><![CDATA[def exception = (Exception)message.getExceptionPayload().getRootException();
+payload = "Adastra Service failed and resulted in an error! \n" + exception.getMessage();]]></scripting:script>
+            </scripting:transformer>
+        </catch-exception-strategy>
+    </flow>
+    <flow name="Check_Dos" doc:name="Check_Dos">
+        
+       <choice doc:name="Choice" >
+            <when expression="'${services.dos.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" path="${services.dos.endpoint.path}" doc:name="HTTP" method="GET"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <https:outbound-endpoint exchange-pattern="request-response"  doc:name="HTTPS" method="GET" connector-ref="HTTP_HTTPS_Pathways" host="${services.dos.endpoint.host}" path="${services.dos.endpoint.path}" port="${services.dos.endpoint.port}"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <logger message="#[message.inboundProperties['http.status']]" level="DEBUG" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties['http.status'].startsWith('200')]">
+                <set-payload value="Pathways Dos Service - Responding" doc:name="Set Payload"/>
+            </when>
+            <otherwise>
+                <set-payload value="Pathways Dos Service - Failed - http GET request status #[message.inboundProperties['http.status']]  expected 200 success" doc:name="Set Payload"/>
+            </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">            
+            <scripting:transformer doc:name="setPayload">
+                <scripting:script engine="Groovy"><![CDATA[def exception = (Exception)message.getExceptionPayload().getRootException();
+payload = "Pathways Dos tests failed and resulted in an error! \n" + exception.getMessage();]]></scripting:script>
+            </scripting:transformer>
+        </catch-exception-strategy>
+        
+    </flow>
+    
+    <flow name="Check_PDS" doc:name="Check_PDS">
+        
+       <choice doc:name="Choice" >
+            <when expression="'${services.pds.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.pds.endpoint.host}" port="${services.pds.endpoint.port}" path="${services.pds.endpoint.path}" doc:name="HTTP" method="GET"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <https:outbound-endpoint exchange-pattern="request-response"  doc:name="HTTPS" method="GET" connector-ref="HTTP_HTTPS-PDS" host="${services.pds.endpoint.host}" path="${services.pds.endpoint.path}" port="${services.pds.endpoint.port}"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <logger message="#[message.inboundProperties['http.status']]" level="DEBUG" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties['http.status'].startsWith('200')]">
+                <set-payload value="PDS Service - Responding" doc:name="Set Payload Success"/>
+            </when>
+            <otherwise>
+                <set-payload value="PDS Service Failed - http GET request status #[message.inboundProperties['http.status']] expected  200 success" doc:name="Set Payload"/>
+            </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <scripting:transformer doc:name="setPayload">
+                <scripting:script engine="Groovy"><![CDATA[def exception = (Exception)message.getExceptionPayload().getRootException();
+payload = "PDS tests failed and resulted in an error! \n" + exception.getMessage();]]></scripting:script>
+            </scripting:transformer>
+        </catch-exception-strategy>
+        
+    </flow>
+    <flow name="Check_Choices_DOS" doc:name="Check_Choices_DOS">
+        <set-variable variableName="path" value="?apikey=${services.nhsuk.apikey}" doc:name="Variable"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="${services.nhsuk.domain}" port="${services.nhsuk.port}" path="#[flowVars['path']]" method="GET" doc:name="HTTP"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties['http.status'].startsWith('200')]">
+                <set-payload value="Choices DOS Service - Responding" doc:name="Set Payload"/>
+            </when>
+            <otherwise>
+                <set-payload value="Choices DOS Service - Failed - http GET request status #[message.inboundProperties['http.status']] expected  200 success" doc:name="Set Payload"/>
+            </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">            
+            <scripting:transformer doc:name="setPayload">
+                <scripting:script engine="Groovy"><![CDATA[def exception = (Exception)message.getExceptionPayload().getRootException();
+payload = "PDS Choices DOS tests failed and resulted in an error! \n" + exception.getMessage();]]></scripting:script>
+            </scripting:transformer>
+        </catch-exception-strategy>
+    </flow>
+    <flow name="Check_IsOOHDisabled" doc:name="Check_IsOOHDisabled">
+        <logger level="INFO" doc:name="Logger"/>
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[org.mule.transport.jdbc.JdbcConnector jdbcConnector = (org.mule.transport.jdbc.JdbcConnector) muleContext.getRegistry().lookupConnector("JDBC");
+javax.sql.DataSource datasource = (javax.sql.DataSource) jdbcConnector.getDataSource();
+java.sql.Connection connection;
+		
+try {
+	connection = (java.sql.Connection) datasource.getConnection();
+	String insertquery="SELECT Coalesce( (SELECT top(1) 1 as [Disabled] FROM OOHSchedule WHERE name LIKE '%Disabled%'), 0 )";
+	java.sql.Statement stmt = connection.createStatement();
+	java.sql.ResultSet rs = stmt.executeQuery(insertquery);
+			
+	int results = 0 ;
+	while(rs.next())
+	{	
+		results = rs.getInt(1);		
+	}
+	rs.close();
+	connection.close();
+	return results;
+} catch (java.sql.SQLException e) {
+			
+}]]></scripting:script>
+        </scripting:transformer>
+        <logger level="INFO" doc:name="Logger" message="message = #[message.payload]"/>
+        <scripting:transformer doc:name="Groovy">
+            <scripting:script engine="Groovy"><![CDATA[def r  = "OOH Service checking is - ";
+if(payload == 1 )
+	r = r +  'Disabled'; 
+else
+	r = r + 'Active';
+	
+payload = r;
+payload]]></scripting:script>
+        </scripting:transformer>
+        <logger message="payload = #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    
+</mule>

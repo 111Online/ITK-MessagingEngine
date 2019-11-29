@@ -1,0 +1,442 @@
+[06-21 10:35:49] INFO  MulePluginManager [main]: Registering plugin: anypoint-plugin-117GA
+[06-21 10:35:49] INFO  MulePluginManager [main]: Registering plugin: mule-plugin-debugger-3.4.0
+[06-21 10:35:49] INFO  AnypointAgentUtils [main]: Anypoint Service Registry Agent is DISABLED. Property anypoint.agent.token is missing or empty.
+[06-21 10:35:49] INFO  DefaultMuleApplication [main]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New app 'octopusconsortium'                              +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:35:49] INFO  MuleApplicationClassLoader [main]: [octopusconsortium] Loading the following jars:
+=============================
+file:/C:/MuleWorkspace/.mule/apps/octopusconsortium/lib/commons-beanutils-1.8.3.jar
+=============================
+
+[06-21 10:35:49] INFO  DefaultMuleApplication [main]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing app 'octopusconsortium'                     +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:35:49] INFO  AbstractLifecycleManager [main]: Initialising RegistryBroker
+[06-21 10:35:50] INFO  MuleApplicationContext [main]: Refreshing org.mule.config.spring.MuleApplicationContext@57030eda: startup date [Fri Jun 21 10:35:50 BST 2013]; root of context hierarchy
+[06-21 10:35:52] INFO  PropertySourcesPlaceholderConfigurer [main]: Loading properties file from class path resource [config.properties]
+[06-21 10:35:52] INFO  PropertySourcesPlaceholderConfigurer [main]: Loading properties file from class path resource [configtest.properties]
+[06-21 10:35:52] INFO  PropertySourcesPlaceholderConfigurer [main]: Loading properties file from class path resource [configtest.properties]
+[06-21 10:35:52] INFO  AutoDiscoverySecurityProviderFactory [main]: Using org.mule.api.security.provider.SunSecurityProviderInfo
+[06-21 10:35:52] INFO  AbstractLifecycleManager [main]: Initialising connector: HTTP_HTTPS_Pathways
+[06-21 10:35:53] INFO  TlsPropertiesMapper [main]: Set Key Store: javax.net.ssl.keyStore = \C:/MuleWorkspace/.mule/apps/octopusconsortium/classes/pathwayskeystore.jks
+[06-21 10:35:53] WARN  GenericTypeAwarePropertyDescriptor [main]: Invalid JavaBean property 'port' being accessed! Ambiguous write methods found next to actually used [public void org.mule.endpoint.URIBuilder.setPort(java.lang.String)]: [public void org.mule.endpoint.URIBuilder.setPort(int)]
+[06-21 10:35:53] INFO  AbstractLifecycleManager [main]: Initialising model: _muleSystemModel
+[06-21 10:35:53] INFO  AutoDiscoverySecurityProviderFactory [main]: Using org.mule.api.security.provider.SunSecurityProviderInfo
+[06-21 10:35:53] INFO  AbstractLifecycleManager [main]: Initialising connector: HTTP_HTTPS
+[06-21 10:35:53] INFO  TlsPropertiesMapper [main]: Set Key Store: javax.net.ssl.keyStore = \C:/MuleWorkspace/.mule/apps/octopusconsortium/classes/keystore.jks
+[06-21 10:35:54] INFO  AbstractLifecycleManager [main]: Initialising connector: connector.http.mule.default
+[06-21 10:35:59] INFO  FlowConstructLifecycleManager [main]: Initialising flow: Submit_Query_To_Repeat_Caller_Service
+[06-21 10:35:59] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@1681200c
+[06-21 10:35:59] INFO  SedaStageLifecycleManager [main]: Initialising service: Submit_Query_To_Repeat_Caller_Service.stage1
+[06-21 10:36:00] INFO  FlowConstructLifecycleManager [main]: Initialising flow: query_dosFlowSendITKendpoint
+[06-21 10:36:00] INFO  CatchMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.CatchMessagingExceptionStrategy@7dff2e4d
+[06-21 10:36:00] INFO  SedaStageLifecycleManager [main]: Initialising service: query_dosFlowSendITKendpoint.stage1
+[06-21 10:36:00] INFO  FlowConstructLifecycleManager [main]: Initialising flow: Query_dos_sendToGP
+[06-21 10:36:00] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@200ecb37
+[06-21 10:36:00] INFO  SedaStageLifecycleManager [main]: Initialising service: Query_dos_sendToGP.stage1
+[06-21 10:36:00] INFO  FlowConstructLifecycleManager [main]: Initialising flow: Submit_HaSC_To_Repeat_Caller_Service
+[06-21 10:36:00] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@650f9e72
+[06-21 10:36:00] INFO  SedaStageLifecycleManager [main]: Initialising service: Submit_HaSC_To_Repeat_Caller_Service.stage1
+[06-21 10:36:00] INFO  FlowConstructLifecycleManager [main]: Initialising flow: Query_dos_checkCapacity
+[06-21 10:36:00] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@1d34f3dc
+[06-21 10:36:00] INFO  SedaStageLifecycleManager [main]: Initialising service: Query_dos_checkCapacity.stage1
+[06-21 10:36:02] INFO  FlowConstructLifecycleManager [main]: Initialising flow: query_dos_getEndpointStatus
+[06-21 10:36:02] INFO  CatchMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.CatchMessagingExceptionStrategy@706be5de
+[06-21 10:36:02] INFO  SedaStageLifecycleManager [main]: Initialising service: query_dos_getEndpointStatus.stage1
+[06-21 10:36:02] INFO  FlowConstructLifecycleManager [main]: Initialising flow: ProcessMessage
+[06-21 10:36:02] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@5c3c6a73
+[06-21 10:36:02] INFO  SedaStageLifecycleManager [main]: Initialising service: ProcessMessage.stage1
+[06-21 10:36:02] INFO  ComponentLifecycleManager [main]: Initialising component: component.505339603
+[06-21 10:36:02] INFO  ComponentLifecycleManager [main]: Initialising component: component.266395863
+[06-21 10:36:02] INFO  FlowConstructLifecycleManager [main]: Initialising flow: MainFlowHttp
+[06-21 10:36:02] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@295e389b
+[06-21 10:36:02] INFO  SedaStageLifecycleManager [main]: Initialising service: MainFlowHttp.stage1
+[06-21 10:36:02] INFO  WebServiceFactoryBean [main]: Built CXF Inbound MessageProcessor for service class OctopusConsortium.Core.MessageEngine
+[06-21 10:36:03] INFO  SedaStageLifecycleManager [main]: Initialising service: MainFlowHttp.async1
+[06-21 10:36:03] INFO  SedaStageLifecycleManager [main]: Initialising service: MainFlowHttp.async2
+[06-21 10:36:03] INFO  ComponentLifecycleManager [main]: Initialising component: component.1489064480
+[06-21 10:36:03] INFO  AbstractLifecycleManager [main]: Initialising connector: connector.VM.mule.default
+[06-21 10:36:03] INFO  FlowConstructLifecycleManager [main]: Initialising flow: TestSubmitCallQueueEnquiry
+[06-21 10:36:03] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@41aaec3d
+[06-21 10:36:03] INFO  SedaStageLifecycleManager [main]: Initialising service: TestSubmitCallQueueEnquiry.stage1
+[06-21 10:36:03] INFO  ComponentLifecycleManager [main]: Initialising component: component.1617664221
+[06-21 10:36:04] INFO  FlowConstructLifecycleManager [main]: Initialising flow: TestPDS
+[06-21 10:36:04] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@2180fccd
+[06-21 10:36:04] INFO  SedaStageLifecycleManager [main]: Initialising service: TestPDS.stage1
+[06-21 10:36:04] INFO  FlowConstructLifecycleManager [main]: Initialising flow: TestDos
+[06-21 10:36:04] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@5153808e
+[06-21 10:36:04] INFO  SedaStageLifecycleManager [main]: Initialising service: TestDos.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Initialising flow: TestingRCS
+[06-21 10:36:05] INFO  DefaultMessagingExceptionStrategy [main]: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@3db47c33
+[06-21 10:36:05] INFO  AutoConfigurationBuilder [main]: Configured Mule using "org.mule.config.spring.SpringXmlConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\main.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\query_dos.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\queryspine.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\repeat_caller_service.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\testendpoints.xml'}]"
+[06-21 10:36:05] INFO  AutoConfigurationBuilder [main]: Configured Mule using "org.mule.config.builders.AutoConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\main.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\query_dos.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\queryspine.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\repeat_caller_service.xml'}, ConfigResource{resourceName='C:\MuleWorkspace\.mule\apps\octopusconsortium\testendpoints.xml'}]"
+[06-21 10:36:05] INFO  DefaultMuleApplication [main]: Monitoring for hot-deployment: C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml;C:\MuleWorkspace\.mule\apps\octopusconsortium\main.xml;C:\MuleWorkspace\.mule\apps\octopusconsortium\query_dos.xml;C:\MuleWorkspace\.mule\apps\octopusconsortium\queryspine.xml;C:\MuleWorkspace\.mule\apps\octopusconsortium\repeat_caller_service.xml;C:\MuleWorkspace\.mule\apps\octopusconsortium\testendpoints.xml
+[06-21 10:36:05] INFO  DefaultMuleApplication [main]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Starting app 'octopusconsortium'                         +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:36:05] INFO  TransactionalQueueManager [main]: Starting ResourceManager
+[06-21 10:36:05] INFO  TransactionalQueueManager [main]: Started ResourceManager
+[06-21 10:36:05] INFO  VMConnector [main]: Connected: VMConnector
+{
+  name=connector.VM.mule.default
+  lifecycle=initialise
+  this=161526f8
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  VMConnector [main]: Starting: VMConnector
+{
+  name=connector.VM.mule.default
+  lifecycle=initialise
+  this=161526f8
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting connector: connector.VM.mule.default
+[06-21 10:36:05] INFO  HttpConnector [main]: Connected: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=initialise
+  this=57bdd9d9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  HttpConnector [main]: Starting: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=initialise
+  this=57bdd9d9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting connector: connector.http.mule.default
+[06-21 10:36:05] INFO  HttpsConnector [main]: Connected: HttpsConnector
+{
+  name=HTTP_HTTPS_Pathways
+  lifecycle=initialise
+  this=3a421f57
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  HttpsConnector [main]: Starting: HttpsConnector
+{
+  name=HTTP_HTTPS_Pathways
+  lifecycle=initialise
+  this=3a421f57
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting connector: HTTP_HTTPS_Pathways
+[06-21 10:36:05] INFO  HttpsConnector [main]: Connected: HttpsConnector
+{
+  name=HTTP_HTTPS
+  lifecycle=initialise
+  this=68f967a9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  HttpsConnector [main]: Starting: HttpsConnector
+{
+  name=HTTP_HTTPS
+  lifecycle=initialise
+  this=68f967a9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting connector: HTTP_HTTPS
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting model: _muleSystemModel
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: MainFlowHttp
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: MainFlowHttp.stage1
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: MainFlowHttp.async1
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: MainFlowHttp.async2
+[06-21 10:36:05] INFO  ComponentLifecycleManager [main]: Starting component: component.1489064480
+[06-21 10:36:05] INFO  HttpConnector [main]: Registering listener: MainFlowHttp on endpointUri: http://localhost:8090/MessageEngine
+[06-21 10:36:05] INFO  DefaultTransportServiceDescriptor [main]: Loading default response transformer: org.mule.transport.http.transformers.MuleMessageToHttpResponse
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Initialising: 'null'. Object is: HttpMessageReceiver
+[06-21 10:36:05] INFO  HttpMessageReceiver [main]: Connecting clusterizable message receiver
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting: 'null'. Object is: HttpMessageReceiver
+[06-21 10:36:05] INFO  HttpMessageReceiver [main]: Starting clusterizable message receiver
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: ProcessMessage
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: ProcessMessage.stage1
+[06-21 10:36:05] INFO  ComponentLifecycleManager [main]: Starting component: component.505339603
+[06-21 10:36:05] INFO  ComponentLifecycleManager [main]: Starting component: component.266395863
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: Query_dos_checkCapacity
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: Query_dos_checkCapacity.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: query_dos_getEndpointStatus
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: query_dos_getEndpointStatus.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: Query_dos_sendToGP
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: Query_dos_sendToGP.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: query_dosFlowSendITKendpoint
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: query_dosFlowSendITKendpoint.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: Submit_HaSC_To_Repeat_Caller_Service
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: Submit_HaSC_To_Repeat_Caller_Service.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: Submit_Query_To_Repeat_Caller_Service
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: Submit_Query_To_Repeat_Caller_Service.stage1
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: TestSubmitCallQueueEnquiry
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: TestSubmitCallQueueEnquiry.stage1
+[06-21 10:36:05] INFO  ComponentLifecycleManager [main]: Starting component: component.1617664221
+[06-21 10:36:05] INFO  VMConnector [main]: Registering listener: TestSubmitCallQueueEnquiry on endpointUri: vm://TestCallEnquiryQueue
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Initialising: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Connecting clusterizable message receiver
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Starting clusterizable message receiver
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: TestPDS
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: TestPDS.stage1
+[06-21 10:36:05] INFO  VMConnector [main]: Registering listener: TestPDS on endpointUri: vm://TestPDSqueue
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Initialising: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Connecting clusterizable message receiver
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Starting clusterizable message receiver
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: TestDos
+[06-21 10:36:05] INFO  SedaStageLifecycleManager [main]: Starting service: TestDos.stage1
+[06-21 10:36:05] INFO  VMConnector [main]: Registering listener: TestDos on endpointUri: vm://testDosGetEndpointStatus
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Initialising: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Connecting clusterizable message receiver
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Starting clusterizable message receiver
+[06-21 10:36:05] INFO  FlowConstructLifecycleManager [main]: Starting flow: TestingRCS
+[06-21 10:36:05] INFO  VMConnector [main]: Registering listener: TestingRCS on endpointUri: vm://TestRCSqueue
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Initialising: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Connecting clusterizable message receiver
+[06-21 10:36:05] INFO  AbstractLifecycleManager [main]: Starting: 'null'. Object is: VMMessageReceiver
+[06-21 10:36:05] INFO  VMMessageReceiver [main]: Starting clusterizable message receiver
+[06-21 10:36:05] INFO  WrapperManagerAgent [main]: This JVM hasn't been launched by the wrapper, the agent will not run.
+[06-21 10:36:05] INFO  JmxAgent [main]: Attempting to register service with name: Mule.octopusconsortium:type=Endpoint,service="TestingRCS",connector=connector.VM.mule.default,name="endpoint.vm.TestRCSqueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Endpoint Service with name: Mule.octopusconsortium:type=Endpoint,service="TestingRCS",connector=connector.VM.mule.default,name="endpoint.vm.TestRCSqueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Attempting to register service with name: Mule.octopusconsortium:type=Endpoint,service="TestSubmitCallQueueEnquiry",connector=connector.VM.mule.default,name="endpoint.vm.TestCallEnquiryQueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Endpoint Service with name: Mule.octopusconsortium:type=Endpoint,service="TestSubmitCallQueueEnquiry",connector=connector.VM.mule.default,name="endpoint.vm.TestCallEnquiryQueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Attempting to register service with name: Mule.octopusconsortium:type=Endpoint,service="TestDos",connector=connector.VM.mule.default,name="endpoint.vm.testDosGetEndpointStatus"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Endpoint Service with name: Mule.octopusconsortium:type=Endpoint,service="TestDos",connector=connector.VM.mule.default,name="endpoint.vm.testDosGetEndpointStatus"
+[06-21 10:36:05] INFO  JmxAgent [main]: Attempting to register service with name: Mule.octopusconsortium:type=Endpoint,service="TestPDS",connector=connector.VM.mule.default,name="endpoint.vm.TestPDSqueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Endpoint Service with name: Mule.octopusconsortium:type=Endpoint,service="TestPDS",connector=connector.VM.mule.default,name="endpoint.vm.TestPDSqueue"
+[06-21 10:36:05] INFO  JmxAgent [main]: Attempting to register service with name: Mule.octopusconsortium:type=Endpoint,service="MainFlowHttp",connector=connector.http.mule.default,name="endpoint.http.localhost.8090.MessageEngine"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Endpoint Service with name: Mule.octopusconsortium:type=Endpoint,service="MainFlowHttp",connector=connector.http.mule.default,name="endpoint.http.localhost.8090.MessageEngine"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Connector Service with name Mule.octopusconsortium:type=Connector,name="connector.VM.mule.default.1"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Connector Service with name Mule.octopusconsortium:type=Connector,name="connector.http.mule.default.1"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Connector Service with name Mule.octopusconsortium:type=Connector,name="HTTP.HTTPS.Pathways"
+[06-21 10:36:05] INFO  JmxAgent [main]: Registered Connector Service with name Mule.octopusconsortium:type=Connector,name="HTTP.HTTPS"
+[06-21 10:36:05] INFO  DefaultMuleApplication [main]: Reload interval: 3000
+[06-21 10:36:05] INFO  DefaultMuleContext [main]: 
+**********************************************************************
+* Application: octopusconsortium                                     *
+* OS encoding: Cp1252, Mule encoding: UTF-8                          *
+*                                                                    *
+* Agents Running:                                                    *
+*   Clustering Agent                                                 *
+*   JMX Agent                                                        *
+**********************************************************************
+[06-21 10:36:05] INFO  MuleDeploymentService [main]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Started app 'octopusconsortium'                          +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:41:41] INFO  DefaultMuleApplication$ConfigFileWatcher [[octopusconsortium].config.change.1.thread.1]: ================== Reloading C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml
+[06-21 10:41:41] INFO  DefaultMuleApplication [[octopusconsortium].config.change.1.thread.1]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Redeploying app 'octopusconsortium'                      +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:41:41] INFO  DefaultMuleApplication [[octopusconsortium].config.change.1.thread.1]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Stopping app 'octopusconsortium'                         +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:41:41] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: MainFlowHttp
+[06-21 10:41:41] INFO  HttpConnector [[octopusconsortium].config.change.1.thread.1]: Removing listener on endpointUri: http://localhost:8090/MessageEngine
+[06-21 10:41:41] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping: 'null'. Object is: HttpMessageReceiver
+[06-21 10:41:41] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing: 'null'. Object is: HttpMessageReceiver
+[06-21 10:41:41] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: MainFlowHttp.stage1
+[06-21 10:41:41] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: MainFlowHttp.async1
+[06-21 10:41:41] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: MainFlowHttp.async2
+[06-21 10:41:42] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping component: component.1489064480
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: ProcessMessage
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: ProcessMessage.stage1
+[06-21 10:41:42] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping component: component.505339603
+[06-21 10:41:42] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping component: component.266395863
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: Query_dos_checkCapacity
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: Query_dos_checkCapacity.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: query_dos_getEndpointStatus
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: query_dos_getEndpointStatus.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: Query_dos_sendToGP
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: Query_dos_sendToGP.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: query_dosFlowSendITKendpoint
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: query_dosFlowSendITKendpoint.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: Submit_HaSC_To_Repeat_Caller_Service
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: Submit_HaSC_To_Repeat_Caller_Service.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: Submit_Query_To_Repeat_Caller_Service
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: Submit_Query_To_Repeat_Caller_Service.stage1
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: TestSubmitCallQueueEnquiry
+[06-21 10:41:42] INFO  VMConnector [[octopusconsortium].config.change.1.thread.1]: Removing listener on endpointUri: vm://TestCallEnquiryQueue
+[06-21 10:41:42] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:42] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: TestSubmitCallQueueEnquiry.stage1
+[06-21 10:41:42] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping component: component.1617664221
+[06-21 10:41:42] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: TestPDS
+[06-21 10:41:42] INFO  VMConnector [[octopusconsortium].config.change.1.thread.1]: Removing listener on endpointUri: vm://TestPDSqueue
+[06-21 10:41:42] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:42] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:42] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: TestPDS.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: TestDos
+[06-21 10:41:43] INFO  VMConnector [[octopusconsortium].config.change.1.thread.1]: Removing listener on endpointUri: vm://testDosGetEndpointStatus
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping service: TestDos.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping flow: TestingRCS
+[06-21 10:41:43] INFO  VMConnector [[octopusconsortium].config.change.1.thread.1]: Removing listener on endpointUri: vm://TestRCSqueue
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing: 'null'. Object is: VMMessageReceiver
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping model: _muleSystemModel
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping connector: connector.VM.mule.default
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping connector: connector.http.mule.default
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping connector: HTTP_HTTPS_Pathways
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Stopping connector: HTTP_HTTPS
+[06-21 10:41:43] INFO  TransactionalQueueManager [[octopusconsortium].config.change.1.thread.1]: Stopping ResourceManager
+[06-21 10:41:43] INFO  TransactionalQueueManager [[octopusconsortium].config.change.1.thread.1]: Stopped ResourceManager
+[06-21 10:41:43] INFO  DefaultMuleApplication [[octopusconsortium].config.change.1.thread.1]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Disposing app 'octopusconsortium'                        +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing RegistryBroker
+[06-21 10:41:43] INFO  VMConnector [[octopusconsortium].config.change.1.thread.1]: Disconnected: VMConnector
+{
+  name=connector.VM.mule.default
+  lifecycle=stop
+  this=161526f8
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing connector: connector.VM.mule.default
+[06-21 10:41:43] INFO  HttpConnector [[octopusconsortium].config.change.1.thread.1]: Disconnected: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=stop
+  this=57bdd9d9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing connector: connector.http.mule.default
+[06-21 10:41:43] INFO  ExpiryMonitor [[octopusconsortium].config.change.1.thread.1]: disposing monitor
+[06-21 10:41:43] INFO  MuleApplicationContext [[octopusconsortium].config.change.1.thread.1]: Closing org.mule.config.spring.MuleApplicationContext@57030eda: startup date [Fri Jun 21 10:35:50 BST 2013]; root of context hierarchy
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: TestingRCS
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: MainFlowHttp
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: MainFlowHttp.stage1
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: MainFlowHttp.async1
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: MainFlowHttp.async2
+[06-21 10:41:43] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing component: component.1489064480
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: ProcessMessage
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: ProcessMessage.stage1
+[06-21 10:41:43] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing component: component.505339603
+[06-21 10:41:43] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing component: component.266395863
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: Submit_Query_To_Repeat_Caller_Service
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: Submit_Query_To_Repeat_Caller_Service.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: Query_dos_sendToGP
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: Query_dos_sendToGP.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: query_dosFlowSendITKendpoint
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: query_dosFlowSendITKendpoint.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: Submit_HaSC_To_Repeat_Caller_Service
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: Submit_HaSC_To_Repeat_Caller_Service.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: Query_dos_checkCapacity
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: Query_dos_checkCapacity.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: query_dos_getEndpointStatus
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: query_dos_getEndpointStatus.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: TestSubmitCallQueueEnquiry
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: TestSubmitCallQueueEnquiry.stage1
+[06-21 10:41:43] INFO  ComponentLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing component: component.1617664221
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: TestPDS
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: TestPDS.stage1
+[06-21 10:41:43] INFO  FlowConstructLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing flow: TestDos
+[06-21 10:41:43] INFO  SedaStageLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing service: TestDos.stage1
+[06-21 10:41:43] INFO  HttpsConnector [[octopusconsortium].config.change.1.thread.1]: Disconnected: HttpsConnector
+{
+  name=HTTP_HTTPS
+  lifecycle=stop
+  this=68f967a9
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing connector: HTTP_HTTPS
+[06-21 10:41:43] INFO  ExpiryMonitor [[octopusconsortium].config.change.1.thread.1]: disposing monitor
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing model: _muleSystemModel
+[06-21 10:41:43] INFO  HttpsConnector [[octopusconsortium].config.change.1.thread.1]: Disconnected: HttpsConnector
+{
+  name=HTTP_HTTPS_Pathways
+  lifecycle=stop
+  this=3a421f57
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[https]
+  serviceOverrides=<none>
+}
+
+[06-21 10:41:43] INFO  AbstractLifecycleManager [[octopusconsortium].config.change.1.thread.1]: Disposing connector: HTTP_HTTPS_Pathways
+[06-21 10:41:43] INFO  ExpiryMonitor [[octopusconsortium].config.change.1.thread.1]: disposing monitor
+[06-21 10:41:43] INFO  DefaultMuleContext [[octopusconsortium].config.change.1.thread.1]: 
+**********************************************************************
+* Application "octopusconsortium" shut down normally on: 21/06/13    *
+* 10:41                                                              *
+* Up for: 0 days, 0 hours, 5 mins, 38.460 sec                        *
+**********************************************************************
+[06-21 10:41:43] INFO  DefaultMuleApplication [[octopusconsortium].config.change.1.thread.1]: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New app 'octopusconsortium'                              +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+[06-21 10:41:43] ERROR DefaultMuleApplication$ConfigFileWatcher [[octopusconsortium].config.change.1.thread.1]: Monitor for C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml threw an exception
+org.mule.module.launcher.InstallException: Config for app 'octopusconsortium' not found: C:\MuleWorkspace\.mule\apps\octopusconsortium\callqueue.xml
+	at org.mule.module.launcher.application.DefaultMuleApplication.install(DefaultMuleApplication.java:111)
+	at org.mule.module.launcher.application.DefaultMuleApplication.redeploy(DefaultMuleApplication.java:350)
+	at org.mule.module.launcher.application.DefaultMuleApplication$ConfigFileWatcher.onChange(DefaultMuleApplication.java:510)
+	at org.mule.module.launcher.AbstractFileWatcher.run(AbstractFileWatcher.java:66)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask$Sync.innerRunAndReset(Unknown Source)
+	at java.util.concurrent.FutureTask.runAndReset(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$301(Unknown Source)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)

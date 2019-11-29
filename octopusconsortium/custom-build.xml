@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This file is a copy of the eclipse generated build file.
+	 It is NOT auto-generated. The following changes have been made to the generated file:
+	 	* Reduced the length of the JAR file paths
+	 	* Added diagnostics echo statements
+	 	* Removed /user/junit and replaced it with /opt/junit
+	  -->
+<project basedir="." default="build" name="octopusconsortium">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../tools/MuleStudio-for-win-64bit-3.4.0/MuleStudio"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="Mule Runtime [Mule Server 3.4.0 CE].libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/boot/commons-cli-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/boot/log4j-1.2.16.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/boot/mule-module-boot-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/boot/mule-module-logging-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/boot/mule-module-reboot-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/boot/wrapper-3.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/endorsed/xalan-2.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/endorsed/xercesImpl-2.9.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/endorsed/xml-apis-1.3.04.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/endorsed/xml-serializer-2.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-common-0.11.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-core-3.4.0-tests.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-core-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-annotations-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-atom-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-bpm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-builders-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-client-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-cxf-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-devkit-support-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-drools-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-jaas-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-jbossts-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-jbpm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-jersey-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-json-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-launcher-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-management-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-ognl-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-pgp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-rss-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-scripting-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-spring-config-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-spring-extras-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-spring-security-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-sxc-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-tomcat-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-module-xml-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-pattern-core-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-tools-anttasks-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-ajax-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-ejb-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-email-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-file-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-ftp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-http-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-jdbc-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-jetty-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-jms-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-multicast-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-quartz-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-rmi-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-servlet-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-sftp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-ssl-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-stdio-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-tcp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-udp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-vm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/mule/mule-transport-xmpp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-client-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-core-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-i18n-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-parser-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-server-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/abdera-spring-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/activation-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/annotations-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/ant-1.7.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/ant-launcher-1.7.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/antlr-3.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/aopalliance-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/asm-3.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/asm-commons-3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/asm-tree-3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/aspectjrt-1.6.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/aspectjweaver-1.6.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/axiom-api-1.2.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/axiom-impl-1.2.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/bcmail-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/bcpg-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/bcprov-ext-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/bcprov-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/bctsp-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cglib-nodep-2.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cometd-api-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cometd-server-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-beanutils-1.8.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-codec-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-collections-3.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-dbutils-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-httpclient-3.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-io-1.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-jxpath-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-lang-2.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-net-2.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/commons-pool-1.5.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-api-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-common-utilities-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-bindings-soap-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-bindings-xml-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-core-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-databinding-aegis-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-databinding-jaxb-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-databinding-jibx-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-frontend-jaxws-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-frontend-simple-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-management-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-transports-common-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-transports-http-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-transports-local-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-ws-addr-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-ws-rm-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-rt-ws-security-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-tools-common-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/cxf-wstx-msv-validation-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/dom4j-1.6.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/drools-api-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/drools-compiler-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/drools-core-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/el-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-annotation_1.0_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-ejb_2.1_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-j2ee-connector_1.5_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-j2ee-management_1.0_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-jms_1.1_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-jta_1.1_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/groovy-all-1.8.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/hamcrest-core-1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/hibernate-commons-annotations-3.2.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/hibernate-core-3.6.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/isorelax-20030108.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jackson-core-asl-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jackson-jaxrs-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jackson-mapper-asl-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jackson-xc-1.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jasper-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jasper-el-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jasper-jdt-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/javassist-3.7.ga.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jaxb-api-2.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jaxb-impl-2.1.9-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jaxb-xjc-2.1.9-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jaxen-1.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jaxws-api-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jboss-logging-3.0.0.Beta5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jbossjta-4.15.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jbpm-api-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jbpm-jpdl-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jbpm-log-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jbpm-pvm-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jcifs-1.3.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jdom-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jersey-client-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jersey-core-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jersey-json-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jersey-server-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jetty-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jetty-annotations-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jetty-plus-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jetty-util-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jetty-util5-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jgrapht-jdk1.5-0.7.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jibx-extras-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jibx-run-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jibx-schema-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/joda-time-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jsch-0.1.44-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jsp-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jsr181-api-1.0-MR1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jsr250-api-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jta-1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/juel-engine-2.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/juel-impl-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/jug-2.0.0-asl.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/juli-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/livetribe-jsr223-2.0.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mail-1.4.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/msv-core-2011.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mvel2-2.1.3.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mx4j-impl-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mx4j-jmx-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mx4j-remote-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/mx4j-tools-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/neethi-3.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/ognl-2.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/opensaml-2.5.1-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/openws-1.4.2-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/oro-2.0.8-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/quartz-1.8.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/relaxngDatatype-20020414.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/rome-0.9.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/saaj-api-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/saaj-impl-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/saxon-8.9.0.4-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/saxon-dom-8.9.0.4-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/saxon-xqj-8.9.0.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/servlet-api-2.5-20081211.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/smack-3.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/smackx-3.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-aop-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-beans-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-context-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-context-support-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-core-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-expression-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-jdbc-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-jms-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-security-config-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-security-core-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-security-crypto-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-security-web-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-tx-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/spring-web-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/stax-api-1.0-2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/stax-utils-20080702-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/stax2-api-3.0.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/staxon-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/sxc-core-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/sxc-runtime-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/sxc-xpath-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/tomcat-apr-5.5.23.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/tomcat-util-5.5.23.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/woodstox-core-asl-4.0.8.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/wsdl4j-1.6.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/wss4j-1.6.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xapool-1.5.0-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xml-resolver-1.2-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xmlpull-1.1.3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xmlschema-core-2.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xmlsec-1.4.0-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xmltooling-1.3.2-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xpp3-1.1.3.4.O.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xpp3_min-1.1.3.4.O-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xsdlib-2010.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/xstream-1.4.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/opt/junit-4.9.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/jruby-complete-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/jruby-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/js-1.6R5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/js-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/jython-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/jython-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/mule-tests-functional-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/user/xmlunit-1.1.jar"/>
+    </path>
+    <path id="octopusconsortium.classpath">
+        <pathelement location="libs/Qxlva/joda-time-2.0.jar"/>
+        <path refid="Mule Runtime [Mule Server 3.4.0 CE].libraryclasspath"/>
+        <pathelement location="bin"/>
+        <pathelement location="libs/commons-beanutils-1.8.3.jar"/>
+        <pathelement location="libs/sqljdbc4.jar"/>
+        <pathelement location="libs/Mockito/separate-jars/com.springsource.org.objenesis-1.0.0.jar"/>
+        <pathelement location="libs/Mockito/separate-jars/mockito-core-1.9.5.jar"/>
+        <pathelement location="libs/wiremock/commons-cli-1.2.jar"/>
+        <pathelement location="libs/wiremock/httpcore-4.3.jar"/>
+        <pathelement location="libs/wiremock/httpcore-ab-4.3.jar"/>
+        <pathelement location="libs/wiremock/httpcore-nio-4.3.jar"/>
+        <pathelement location="libs/wiremock/wiremock-1.36.jar"/>
+        <pathelement location="libs/wiremock/httpclient-4.3.1.jar"/>
+        <pathelement location="libs/wiremock/jackson-databind-2.2.3.jar"/>
+        <pathelement location="libs/wiremock/jackson-core-2.2.3.jar"/>
+        <pathelement location="libs/wiremock/guava-15.0.jar"/>
+        <pathelement location="libs/wiremock/jackson-annotations-2.2.3.jar"/>
+        <pathelement location="libs/Qxlva/webservice_common-1.1.7.jar"/>
+        <pathelement location="libs/Qxlva/smsp_webcommon-1.1.7.jar"/>
+        <pathelement location="libs/Qxlva/assist-time-1.0.9-SNAPSHOT.jar"/>
+        <pathelement location="libs/Qxlva/smsp_webclient-1.1.7.jar"/>
+        <pathelement location="libs/mockrunner-core-0.4.5.jar"/>
+        <pathelement location="libs/mockrunner-jdbc-0.4.5.jar"/>
+        <pathelement location="libs/Qxlva/generic_webservice_objects-1.1.7.jar"/>
+    </path>
+    
+	<pathconvert property="classpath" refid="octopusconsortium.classpath"/>
+	<echo message="${ECLIPSE_HOME}" />
+	<echo message="Classpath: ${classpath}" />
+	<echo message = "Java version: ${java.version}"/>
+	
+	<target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/app">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/test/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/resources">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/test/resources">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <src path="src/main/app"/>
+            <src path="src/test/java"/>
+            <src path="src/main/resources"/>
+            <src path="src/test/resources"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="AllTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.AllTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="AllUnitTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr" haltonerror="yes" failureproperty="test.failed">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.AllUnitTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    	<fail if="test.failed"/>
+    </target>
+    <target name="AuthorisationFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.AuthorisationFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="BankHolidayCacheTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.BankHolidayCacheTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="CheckLondonPostcodesTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.DoS.CheckLondonPostcodesTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="DosFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.DosFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="EncounterResponseToDosCheckCapacitySummaryTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.DoS.EncounterResponseToDosCheckCapacitySummaryTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests.IsBankHoliday_WithChristmasInEngland_ReturnsTrue">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests.IsBankHoliday_WithNonBankHoliday_ReturnsFalse">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="ITKDigitalSignatureTransformerFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.ITKDigitalSignatureTransformerFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="LocateServicesFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.LocateServicesFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OOHITKFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.OOHITKFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OOHLondonPostcodeCacheTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.OOHLondonPostcodeCacheTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OrqestraMessageTransformerFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.OrqestraMessageTransformerFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OrqestraMessageTransformerTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.OrqestraMessageTransformerTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SqlBatchExecutorTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.SqlBatchExecutorTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueDobValidationInterceptorTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.SubmitToCallQueueDobValidationInterceptorTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest.doTransform_WithoutProvider_ReturnsDefaultAuthor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest.doTransform_WithProvider_ReturnsCorrectAuthor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.SubmitToCallQueueFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="VerifyPatientFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.VerifyPatientFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="VerifyPatientFunctionalTest.verifyPatient_WithPatientDetails_SendsSignedMessageToPDS">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.VerifyPatientFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="WSSecurityTransformerTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.WSSecurityTransformerTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="XMLGregorianCalendarConversionUtil">
+        <java classname="OctopusConsortium.Core.XMLGregorianCalendarConversionUtil" failonerror="true" fork="yes">
+            <classpath refid="octopusconsortium.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

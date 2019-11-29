@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:itk="urn:nhs-itk:ns:201005">
+   <S:Header>
+      <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+      <Action xmlns="http://www.w3.org/2005/08/addressing">urn:nhs-itk:services:201005:getPatientDetails-v1-0Response</Action>
+      <MessageID xmlns="http://www.w3.org/2005/08/addressing">0934E544-7FA6-47BB-B612-0EA7AE1041C4</MessageID>
+      <RelatesTo xmlns="http://www.w3.org/2005/08/addressing">19FD4F75-98C7-11E0-BEA6-D1590EE35055</RelatesTo>
+   </S:Header>
+   <S:Body>
+      <ns2:DistributionEnvelope xmlns:ns2="urn:nhs-itk:ns:201005" xmlns="urn:hl7-org:v3">
+         <ns2:header service="urn:nhs-itk:services:201005:getPatientDetails-v1-0Response" trackingid="2AB6C550-7A48-11E0-8000-000000000000">
+            <ns2:auditIdentity>
+               <ns2:id uri="itk:spi:qxlva-soap-client" />
+            </ns2:auditIdentity>
+            <ns2:manifest count="1">
+               <ns2:manifestitem base64="false" compressed="false" encrypted="false" id="uuid_32CBB641-98C7-11E0-8E7E-842B2B5C1EC4" mimetype="text/xml" profileid="urn:nhs-en:profile:getPatientDetailsResponse-v1-0" />
+            </ns2:manifest>
+         </ns2:header>
+         <ns2:payloads count="1">
+            <ns2:payload id="uuid_32CBB641-98C7-11E0-8E7E-842B2B5C1EC4">
+               <getPatientDetailsResponse-v1-0 classCode="OBS" moodCode="EVN">
+                  <id root="32CBB640-98C7-11E0-8E7E-842B2B5C1EC4" />
+                  <code code="getPatientDetailsResponse-v1-0" codeSystem="2.16.840.1.113883.2.1.3.2.4.17.284" />
+                  <value code="DEMOG-0001" codeSystem="2.16.840.1.113883.2.1.3.2.4.17.285" />
+               </getPatientDetailsResponse-v1-0>
+            </ns2:payload>
+         </ns2:payloads>
+      </ns2:DistributionEnvelope>
+   </S:Body>
+</S:Envelope>

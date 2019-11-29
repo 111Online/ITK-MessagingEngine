@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+    <http:request-config name="HTTP_Email_Request" protocol="HTTPS" host="${services.email.host}" port="443" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_Pathways_HTTPS"  host="${services.pathways.endpoint.host}" port="${services.pathways.endpoint.port}" connectionIdleTimeout="10000" doc:name="HTTP Request Configuration" basePath="/" protocol="HTTPS">
+        <tcp:client-socket-properties connectionTimeout="10000"/>
+    </http:request-config>
+    <http:request-config name="HTTP_Request_Configuration_Pathways_HTTP"  host="${services.pathways.endpoint.host}" port="${services.pathways.endpoint.port}" connectionIdleTimeout="10000" doc:name="HTTP Request Configuration" basePath="/">
+        <tcp:client-socket-properties connectionTimeout="10000"/>
+    </http:request-config>
+    <flow name="itk_submission_main" >
+        <logger message="starting itk_submission_main " level="TRACE" category="itk_submission_main" doc:name="Logger"/>
+        <set-session-variable variableName="ITKJourneyId" value="#[payload.getCaseDetails().getJourneyId()]" doc:name="Save Journey Id"/>
+        <set-session-variable variableName="ITKRecipientDOSId" value="#[payload.getServiceDetails().getId()]" doc:name="Save DOS Id of Recipient Service"/>
+        <set-session-variable variableName="ITKRecipientName" value="#[payload.getServiceDetails().getName()]" doc:name="Save Name of Recipient Service"/>
+        <set-session-variable variableName="ITKRecipientCcg" value="#[payload.getServiceDetails().getCcg()]" doc:name="Save CCG of Recipient Service"/>
+        <set-session-variable variableName="ITKRecipientStp" value="#[payload.getServiceDetails().getStp()]" doc:name="Save STP of Recipient Service"/>
+              
+        <set-variable variableName="OrigMessage" value="#[payload]" doc:name="Save Original Message" doc:description="payload should be OctopusConsortium.Service.Models.HaSCMessage"/>
+        <flow-ref name="QuerySpine_HydrateCDAWithPDSData" doc:name="Hydrate with PDS" doc:description="Attempt to get more patient information from message, and populate payload with it."/>
+        <choice doc:name="DOS Choice">
+            <when expression="'${services.dos.proxy.endpoint.host}' !=null and '${services.dos.proxy.endpoint.host}' != ''">
+                <flow-ref name="query_dos_getservicedetails_with_proxy" doc:name="query_dos_checkservices_with_proxy"/>
+            	<custom-transformer class="OctopusConsortium.Core.Transformers.DoS.Proxy.ProxyServiceDetailsResponseToNhs111Endpoints" doc:name="ProxyServiceDetailsResponseToNhs111Endpoints"/>
+            </when>
+            <otherwise>
+                <flow-ref name="query_dos_getservicedetails" doc:name="Check Services" doc:description="Look for service based on service details passed"/>
+
+                <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.ServiceDetailsResponseToNhs111Endpoints" doc:name="ServiceDetailsResponseToNhs111Endpoints"/>
+
+            </otherwise>
+        </choice>
+
+        <!-- <scripting:transformer doc:name="DX Code Override">
+            <scripting:script engine="Groovy"><![CDATA[payload.getCaseDetails().setDispositionName("Speak To GP Practice Within 1 hour.");
+payload.getCaseDetails().setDispositionCode("11");
+payload]]></scripting:script>
+        </scripting:transformer>-->
+
+
+        <choice doc:name="Determine ITK Proxy Use AND Override Endpoint Use">
+            <when expression="'${application.proxy.gp111.endpoint}' !=null and '${application.proxy.gp111.endpoint}' != '' and '${application.test.gp111.endpoint}' !=null and '${application.test.gp111.endpoint}' != '' ">
+            	<processor-chain doc:name="Overriden Endpoint sent via. Proxy">
+                    <logger message="Overriden endpoint sent via proxy" level="INFO" doc:name="Overriden endpoint sent via proxy"/>
+
+                            <message-properties-transformer doc:name="Add Recipient Url Property">
+                                <add-message-property key="RecipientEndpointUrl" value="${application.test.gp111.endpoint}"/>
+                            </message-properties-transformer>
+                    <set-session-variable variableName="ITKRecipientUrl" value="${application.test.gp111.endpoint}" doc:name="Save ITKRecipientUrl Variable"/>
+                            <logger message="Overriding GP endpoint sending via. Proxy" level="DEBUG" doc:name="Log Override"/>
+                            <scripting:transformer doc:name="Replace with Proxy Endpoint">
+                                <scripting:script engine="Groovy">
+                                    <property key="endpoint" value="${application.proxy.gp111.endpoint}"/>
+                            <scripting:text><![CDATA[def endpoints = new OctopusConsortium.Models.Nhs111Endpoints();
+def proxy = new OctopusConsortium.Models.Nhs111Endpoint();    
+println "Endpoint changed to overriden endpoint via. proxy!"
+proxy.setUrl("$endpoint");
+proxy.setInteraction("urn:nhs-itk:interaction:primaryOutofHourRecipientNHS111CDADocument-v2-0");
+endpoints.getEndpoints().add(proxy);
+payload = endpoints;
+payload;]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </scripting:script>
+                            </scripting:transformer>
+                            <logger message="journeyId =  #[sessionVars.ITKJourneyId] gpEndpoint = ${application.test.gp111.endpoint} proxy = ${application.proxy.gp111.endpoint} messageid = #[message.id] flow itk_submission_main" level="WARN" category="DosSendToGP" doc:name="Log URLs"/>
+                    <choice doc:name="Override is email address?">
+                        <when expression="#[payload.getEndpoints().get(0).getUrl().contains(&quot;@&quot;)]">
+                            <logger message="Setting transport to email for override" level="DEBUG" doc:name="Setting transport to email for override"/>
+                            <message-properties-transformer overwrite="true" doc:name="Set Transport Type to email">
+                                <add-message-property key="EndpointTransport" value="#[OctopusConsortium.DosService1_5.EndpointTransportType.EMAIL]"/>
+                            </message-properties-transformer>
+                        </when>
+                        <otherwise>
+                            <logger message="Overriding ITK endpoint" level="DEBUG" doc:name="Overriding ITK endpoint"/>
+                        </otherwise>
+                    </choice>
+            	
+            	</processor-chain>
+            	
+            
+            </when>
+        
+            <when expression="#['${application.proxy.gp111.endpoint}' !=null and '${application.proxy.gp111.endpoint}' != '' and payload.getEndpoints().get(0).getTransport() == OctopusConsortium.DosService1_5.EndpointTransportType.ITK]">
+             <processor-chain doc:name="Proxy Endpoint">
+                    <choice doc:name="Endpoint check">
+                        <when expression="#[payload.getEndpoints().size()==0]">
+                            <logger message="GP endpoint not sent to via proxy due to no recipient URL found in DOS dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] messageid = #[message.id] flow itk_submission_main" level="ERROR" category="DosSendToGP" doc:name="No endpoint"/>
+                            <scripting:transformer doc:name="Set response to failed">
+                                <scripting:script engine="Groovy"><![CDATA[def OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse response = new OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse();
+
+payload = response;]]></scripting:script>
+                            </scripting:transformer>
+
+                        </when>
+                        <otherwise>
+                            <logger message="Endpoint being proxied '#[payload.getEndpoints().get(0).getTransport()]'" level="INFO" doc:name="Endpoint being proxied"/>
+                            <set-session-variable variableName="whitelist" value="${application.test.gp111.endpoint.whitelist}" doc:name="Set whitelist"/>
+                            <flow-ref name="itk_submission_111EndpointWhiteList" doc:name="itk_submission_111EndpointWhiteList"/>
+                            <logger message="dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] gpEndpoint=#[payload.getEndpoints().get(0).getUrl()] proxy = ${application.proxy.gp111.endpoint} messageid = #[message.id] flow itk_submission_main" level="WARN" category="DosSendToGP" doc:name="Log URLs"/>
+                            <message-properties-transformer doc:name="Add Recipient Url Property">
+                                <add-message-property key="RecipientEndpointUrl" value="#[payload.getEndpoints().get(0)getUrl()]"/>
+                            </message-properties-transformer>
+                            <set-session-variable variableName="ITKRecipientUrl" value="#[payload.getEndpoints().get(0)getUrl()]" doc:name="Save ITKRecipientUrl Variable"/>
+                            <logger message="#[message.outboundProperties['RecipientEndpointUrl']]" level="INFO" doc:name="Logger"/>
+
+                            <scripting:transformer doc:name="Replace with Proxy Endpoint">
+                                <scripting:script engine="Groovy">
+                                    <property key="endpoint" value="${application.proxy.gp111.endpoint}"/>
+                                    <scripting:text><![CDATA[def endpoints = new OctopusConsortium.Models.Nhs111Endpoints();
+def proxy = new OctopusConsortium.Models.Nhs111Endpoint();    
+println "Endpoint changed to route via. proxy!"
+proxy.setUrl("$endpoint");
+proxy.setInteraction("urn:nhs-itk:interaction:primaryOutofHourRecipientNHS111CDADocument-v2-0");
+endpoints.getEndpoints().add(proxy);
+payload = endpoints;
+payload;]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </scripting:script>
+                            </scripting:transformer>
+
+                        </otherwise>
+                    </choice>
+
+                </processor-chain>
+            </when>
+        
+            <when expression="'${application.test.gp111.endpoint}' !=null and '${application.test.gp111.endpoint}' != '' ">
+                <processor-chain doc:name="Overriden Endpoint">
+                    <logger message="Overriding recipient endpoint" level="INFO" doc:name="Log Override"/>
+                    <logger message="journeyId =  #[sessionVars.ITKJourneyId] gpEndpoint = ${application.test.gp111.endpoint} messageid = #[message.id] flow itk_submission_main" level="WARN" category="DosSendToGP" doc:name="Log URLs"/>
+                    <message-properties-transformer doc:name="Add Recipient Url Property">
+                        <add-message-property key="RecipientEndpointUrl" value="${application.test.gp111.endpoint}"/>
+                    </message-properties-transformer>
+                    <set-session-variable variableName="ITKRecipientUrl" value="${application.test.gp111.endpoint}" doc:name="Save ITKRecipientUrl Variable"/>
+                    <scripting:transformer doc:name="Replace with Test Endpoint">
+                        <scripting:script engine="Groovy">
+                            <property key="endpoint" value="${application.test.gp111.endpoint}"/>
+                            <scripting:text><![CDATA[def endpoints = new OctopusConsortium.Models.Nhs111Endpoints();
+def test = new OctopusConsortium.Models.Nhs111Endpoint();    
+println "Endpoint changed to test override!"
+test.setUrl("$endpoint");
+test.setInteraction("urn:nhs-itk:interaction:primaryOutofHourRecipientNHS111CDADocument-v2-0");
+endpoints.getEndpoints().add(test);
+payload = endpoints;
+payload;]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        </scripting:script>
+                    </scripting:transformer>
+                    <choice doc:name="Override is email address?">
+                        <when expression="#[payload.getEndpoints().get(0).getUrl().contains(&quot;@&quot;)]">
+                            <logger message="Setting transport to email for override" level="INFO" doc:name="Logger"/>
+                            <scripting:transformer doc:name="Set transport Type email">
+                                <scripting:script engine="Groovy"><![CDATA[payload.getEndpoints().get(0).setTransport(OctopusConsortium.DosService1_5.EndpointTransportType.EMAIL);
+payload;]]></scripting:script>
+                            </scripting:transformer>
+                            <message-properties-transformer overwrite="true" doc:name="Set Transport Type to email">
+                                <add-message-property key="EndpointTransport" value="#[OctopusConsortium.DosService1_5.EndpointTransportType.EMAIL]"/>
+                            </message-properties-transformer>
+                        </when>
+                        <otherwise>
+                            <logger message="Overriding ITK endpoint" level="DEBUG" doc:name="Overriding ITK endpoint"/>
+                        </otherwise>
+                    </choice>
+
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Not overridden Endpoint">
+                    <logger message="No override, no proxy #[payload.getEndpoints().get(0).getTransport()]" level="INFO" doc:name="No override, no proxy"/>
+                    <choice doc:name="Endpoint check">
+                        <when expression="#[payload.getEndpoints().size()==0]">
+                            <logger message="GP endpoint not sent to due to no recipient URL found in DOS dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] messageid = #[message.id] flow itk_submission_main" level="ERROR" category="DosSendToGP" doc:name="Log No endpoint"/>
+                            <scripting:transformer doc:name="Set response to failed" mimeType="application/csv">
+                                <scripting:script engine="Groovy"><![CDATA[def OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse response = new OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse();
+
+payload = response;]]></scripting:script>
+                            </scripting:transformer>
+                        </when>
+                        <when expression="#[payload.getEndpoints().get(0).getTransport() == OctopusConsortium.DosService1_5.EndpointTransportType.EMAIL]">
+                            <logger message="Using email whitelist" level="INFO" doc:name="Using email whitelist"/>
+                            <set-session-variable variableName="ITKRecipientUrl" value="#[payload.getEndpoints().get(0).getUrl()] " doc:name="Save ITKRecipientUrl Variable"/>
+                            <set-session-variable variableName="whitelist" value="${application.email.whitelist}" doc:name="Set email whitelist"/>
+                        </when>
+                        <otherwise>
+                            <logger message="dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] gpEndpoint=#[payload.getEndpoints().get(0).getUrl()]  messageid = #[message.id] flow itk_submission_main" level="WARN" category="DosSendToGP" doc:name="Log URLs"/>
+                            <set-session-variable variableName="ITKRecipientUrl" value="#[payload.getEndpoints().get(0).getUrl()] " doc:name="Save ITKRecipientUrl Variable"/>
+                            <set-session-variable variableName="whitelist" value="${application.test.gp111.endpoint.whitelist}" doc:name="Set whitelist"/>
+
+                        </otherwise>
+                    </choice>
+                    <flow-ref name="itk_submission_111EndpointWhiteList" doc:name="itk_submission_111EndpointWhiteList"/>
+
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <choice doc:name="Check for 111 endpoints object">
+            <when expression="payload instanceof OctopusConsortium.Models.Nhs111Endpoints">
+                <processor-chain doc:name="Create and send message">
+                    <set-variable variableName="nhs111endpoints" value="#[payload]" doc:name="Save nhs111endpoints"/>
+                    <flow-ref name="itk_submission_generate_pathways_case" doc:name="Create pathways case"/>
+                    <set-payload value="#[variable:nhs111endpoints]" doc:name="Nhs111endpoints"/>
+                    <message-properties-transformer doc:name="Message Properties for Endpoint" doc:description="Must be done before the CDA Document and envelope as these look for the message properties The &quot;interactionId&quot; is used in the ToDistributionEnvelope transformer">
+                        <add-message-property key="interactionId" value="#[payload.getEndpoints().get(0).getInteraction()]"/>
+                        <add-message-property key="EndpointUrl" value="#[payload.getEndpoints().get(0)getUrl()]"/>
+                        <add-message-property key="EndpointHost" value="#[payload.getEndpoints().get(0)getUrlHost()]"/>
+                        <add-message-property key="EndpointPath" value="#[payload.getEndpoints().get(0)getUrlPath()]"/>
+                        <add-message-property key="EndpointPort" value="#[payload.getEndpoints().get(0)getUrlPort()]"/>
+                        <add-message-property key="EndpointProtocol" value="#[payload.getEndpoints().get(0)getUrlProtocol()]"/>
+                        <add-message-property key="EndpointTransport" value="#[payload.getEndpoints().get(0)getTransport()]"/>
+                        <!-- the "interactionId" is used in the ToDistributionEnvelope transformer -->
+                    </message-properties-transformer>
+                    <set-payload value="#[variable:OrigMessage]" doc:name="Original Message"/>
+                    <message-properties-transformer doc:name="Message Properties">
+                        <add-message-property key="recipientId" value="#[payload.getServiceDetails().getId()]"/>
+                    </message-properties-transformer>
+                    <custom-transformer class="OctopusConsortium.Core.Transformers.ITK.SubmitEncounterToServiceToCDA_UK" doc:name="Convert to CDA" mimeType="application/json">
+                    	<spring:property name="orgName" value="${info.org.name}"/>
+						<spring:property name="ods" value="${info.org.ods}"/>
+                    </custom-transformer>
+                    <message-properties-transformer doc:name="Save CDA ID">
+                        <add-message-property key="documentId" value="#[payload.getId()]"/>
+                    </message-properties-transformer>
+                    <choice doc:name="What transport type is the endpoint?">
+                        <when expression="#[message.outboundProperties['EndpointTransport'] == OctopusConsortium.DosService1_5.EndpointTransportType.EMAIL]">
+                            <logger message="Endpoint is an email address" level="INFO" doc:name="Endpoint is an email address"/>
+                            <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.CDAToXml" doc:name="Convert CDA to XML"/>
+                            <flow-ref name="message_logging_SendNHS111Request_email" doc:name="Log CDA"/>
+                            <mulexml:xslt-transformer xsl-file="xsl/CDA_NPfIT_Document_Renderer_IntegratedUrgentCare.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="Transform XML to HTML" encoding="UTF-8" outputEncoding="UTF-8"/>
+                            <choice doc:name="Which format does this address expect?">
+                                <when expression="true == false">
+                                    <logger message="Endpoint expects PDF" level="INFO" doc:name="Endpoint expects PDF"/>
+                                </when>
+                                <otherwise>
+                                    <logger message="Endpoint expects HTML" level="DEBUG" doc:name="Endpoint expects HTML"/>
+                                </otherwise>
+                            </choice>
+                            <scripting:transformer mimeType="application/json" doc:name="Create email request JSON">
+                                <scripting:script engine="Groovy"><![CDATA[def json = new groovy.json.JsonBuilder()
+
+class Attachment {
+	String Key
+	String Value
+}
+
+def html = new String(payload)
+def encoded = html.bytes.encodeBase64().toString()
+ 
+def address = message.getOutboundProperty('EndpointUrl')
+def attachmentName = message.getOutboundProperty('documentId').getRoot() + ".html"
+def attachments = [encoded].collect{v -> new Attachment(Key: attachmentName, Value: v)}
+ 
+json ToEmails: [address], "CcEmails": [], "Body": "NHS 111 online referral", "Subject": "[SECURE] NHS 111 online referral", "Attachments": attachments, "EmailType": "Referral"
+
+payload = json.toString()]]></scripting:script>
+                            </scripting:transformer>
+                            <http:request config-ref="HTTP_Email_Request" path="${services.email.endpoint}" method="POST" doc:name="Send email">
+                                <http:request-builder>
+                                    <http:query-param paramName="code" value="${services.email.code}"/>
+
+
+                                </http:request-builder>
+                                <http:success-status-code-validator values="200,500"/>
+                            </http:request>
+                            <set-payload value="#[message.inboundProperties['http.status']]" doc:name="Set Payload to HTTP response code"/>
+                            <flow-ref name="message_logging_SendNHS111Response" doc:name="Log response to DB"/>
+                            <choice doc:name="Response code">
+                                <when expression="#[message.inboundProperties['http.status'] != '200']">
+                                    <set-payload value="&lt;failure&gt;" doc:name="Set payload to failure" doc:description="Payload is set to an arbitrary string."/>
+                                </when>
+                                <otherwise>
+                                    <set-payload value="success" doc:name="Set payload to success"/>
+                                </otherwise>
+                            </choice>
+                        </when>
+                        <otherwise>
+                            <logger message="Endpoint is an ITK address" level="INFO" doc:name="Endpoint is an ITK address"/>
+                            <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.ToDistributionEnvelope" doc:name="To Distribution Envelope">
+                            	<spring:property name="orgName" value="${info.org.name}"/>
+								<spring:property name="ods" value="${info.org.ods}"/>
+                            </custom-transformer>
+                            <flow-ref name="query_dosFlowSendITKendpoint" doc:name="Send to ITK endpoint"/>
+                        </otherwise>
+                    </choice>
+
+                    <choice doc:name="Determine ITK Success">
+                        <when expression="payload instanceof String &amp;&amp; !payload.isEmpty() &amp;&amp; payload.charAt(0)!= &quot;&lt;&quot;">
+                            <scripting:transformer doc:name="Set Response Success">
+                                <scripting:script engine="Groovy"><![CDATA[def OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse response = new OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse();
+
+response.setOverallStatus(OctopusConsortium.Service.Models.SubmitEncounterToServiceResponseOverallStatus.SUCCESSFUL_CALL_TO_WEBSERVICE);
+
+payload = response;]]></scripting:script>
+                            </scripting:transformer>
+                            <logger message="ITK SUCCESS for dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] dosName = '#[sessionVars.ITKRecipientName]' url = #[sessionVars.ITKRecipientUrl] ccg = '#[sessionVars.ITKRecipientCcg]' stp = '#[sessionVars.ITKRecipientStp]'" level="WARN" category="DosSendToGP" doc:name="Log Success"/>
+                        </when>
+                        <otherwise>
+                            <scripting:transformer doc:name="Set Response Failure">
+                                <scripting:script engine="Groovy"><![CDATA[def OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse response = new OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse();
+
+response.setOverallStatus(OctopusConsortium.Service.Models.SubmitEncounterToServiceResponseOverallStatus.FAILED_CALL_TO_WEBSERVICE);
+
+payload = response;]]></scripting:script>
+                            </scripting:transformer>
+                            <logger message="ITK FAILURE for dosId = #[sessionVars.ITKRecipientDOSId] journeyId =  #[sessionVars.ITKJourneyId] dosName = '#[sessionVars.ITKRecipientName]' url = #[sessionVars.ITKRecipientUrl] ccg = '#[sessionVars.ITKRecipientCcg]' stp = '#[sessionVars.ITKRecipientStp]'" level="WARN" category="DosSendToGP" doc:name="Log Failure"/>
+                        </otherwise>
+                    </choice>
+                    <remove-variable variableName="#[variable:OrigMessage]" doc:name="Remove Original Message"/>
+                    <remove-session-variable variableName="ITKJourneyId" doc:name="Remove External Reference Variable"/>
+                    <remove-session-variable variableName="ITKRecipientDOSId" doc:name="Remove DOS Id Variable"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <logger message="No ITK Endpoint found or ITK configuration incorrect. Cannot send message" level="WARN" doc:name="Logger"/>
+            </otherwise>
+        </choice>
+
+         <choice-exception-strategy doc:name="Choice Exception Strategy">
+            <catch-exception-strategy when="#[exception.causedBy(OctopusConsortium.Core.InvalidMessageException) == false &amp;&amp; exception.causedBy(org.mule.api.transformer.TransformerException) == false]" doc:name="Catch Exception Strategy">
+                <scripting:transformer doc:name="Set response to failed">
+                    <scripting:script engine="Groovy"><![CDATA[def OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse response = new OctopusConsortium.Service.Models.SubmitEncounterToServiceResponse();
+
+payload = response;]]></scripting:script>
+                </scripting:transformer>
+            </catch-exception-strategy>
+        </choice-exception-strategy>
+        
+    </flow>
+    <flow name="itk_submission_111EndpointWhiteList" >
+        <choice doc:name="Choice">
+            <when expression="#[payload instanceof OctopusConsortium.Models.Nhs111Endpoints]">
+                <logger message="Checking endpoints against whitelist ${application.test.gp111.endpoint.whitelist}" level="INFO" doc:name="Logger"/>
+                <scripting:transformer doc:name="Groovy">
+                    <scripting:script engine="Groovy">
+                        <scripting:text><![CDATA[import groovy.util.logging.*
+
+def whitelist = sessionVars['whitelist'];
+
+if(whitelist!=null && !whitelist.equals('')){
+	def endpoints = payload.getEndpoints();
+	String[] str_array = whitelist.split(";");
+
+	for (ep in endpoints){
+		def url = ep.getUrl()
+		if (ep.getUrl().contains("@")) {
+			url = url.substring(url.indexOf("@") + 1)
+		}
+			
+		if(!Arrays.asList(str_array).contains(url)){
+			log.error "111 endpoint not authorised: " + ep.getUrl()
+			throw new OctopusConsortium.Core.InvalidMessageException("111 endpoint is not authorised." + ep.getUrl() );		
+		}
+	}
+}
+payload;]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </scripting:script>
+                </scripting:transformer>
+                <logger message="Attempting to override gp endpoint with - #[payload]" level="DEBUG" doc:name="Logger"/>
+
+            </when>
+            <when expression="${application.test.gp111.endpoint.whitelist} != null &amp;&amp; ${application.test.gp111.endpoint.whitelist} != &quot;&quot;">
+                <logger level="INFO" doc:name="Logger" message="no white list defined"/>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <logger level="INFO" doc:name="Unexpected type" message="Unexpected type. Cannot check #[payload.class] against white list."/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </flow>
+
+    <flow name="itk_submission_generate_pathways_case">
+        <choice doc:name="Rehydrate case">
+            <when expression="'${services.pathways.endpoint.host}' == 'null' || '${services.pathways.endpoint.host}' == ''">
+                <logger message="Pathways rehydration not enabled, so not attempted" level="INFO" category="Rehydration" doc:name="Pathway Rehydration Disabled"/>
+            </when>
+            <otherwise>
+                <set-payload value="#[variable:OrigMessage]" doc:name="Set Payload"/>
+                <custom-transformer class="OctopusConsortium.Core.Transformers.PathwaysCase.SubmitEncounterToServiceRequestToQuestionWithAnswersRequest" doc:name="ToQuestionWithAnswersRequest"/>
+		        <json:object-to-json-transformer doc:name="Object to JSON"/>
+		        <flow-ref name="message_logging_GetFullPathwaysJourneyRequest" doc:name="Log Request"/>
+		        <choice doc:name="Protocol">
+		            <when expression="'${services.pathways.endpoint.protocol}' == 'http'">
+		                <http:request config-ref="HTTP_Request_Configuration_Pathways_HTTP" path="${services.pathways.endpoint.path}" method="POST" sendBodyMode="ALWAYS" doc:name="HTTP Get Full Pathways Journey"/>
+			        </when>
+		            <otherwise>
+		                <http:request config-ref="HTTP_Request_Configuration_Pathways_HTTPS" path="${services.pathways.endpoint.path}" method="POST" sendBodyMode="ALWAYS" doc:name="HTTPS Get Full Pathways Journey"/>
+		            </otherwise>
+		        </choice>
+		        <flow-ref name="message_logging_GetFullPathwaysJourneyResponse" doc:name="Log Response"/>
+		        <json:json-to-object-transformer returnClass="OctopusConsortium.Models.PathwaysTriage.QuestionWithAnswers[]" doc:name="JSON to Object"/>
+		        <set-variable variableName="PathwaysCaseTriageDetails" value="#[payload]" doc:name="Save Triage Details"/>
+		        <scripting:transformer doc:name="Combine Payloads">
+		            <scripting:script engine="Groovy"><![CDATA[def newPayload = new OctopusConsortium.Models.CombinedPayloads();
+				newPayload.setPayload1(message.getInvocationProperty('OrigMessage'));
+				newPayload.setPayload2(message.getInvocationProperty('PathwaysCaseTriageDetails'));
+				payload = newPayload;]]></scripting:script>
+		        </scripting:transformer>
+		        <custom-transformer class="OctopusConsortium.Core.Transformers.PathwaysCase.SubmitEncounterToServiceRequestToPathwaysCase" doc:name="ToPathwaysCase">
+
+		        	<spring:property name="orgName" value="${info.org.name}"/>
+					<spring:property name="ods" value="${info.org.ods}"/>
+                    <spring:property name="PathwaysSchema" value="${services.pathways.schemalocation}"/>
+                </custom-transformer>
+                <set-variable variableName="pathwaysCaseEncoded" value="#[payload]" doc:name="Save pathwaysCaseEncoded"/>
+        </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="itk_submissionCatch_Exception_Strategy">
+            <set-payload value="#[flowVars.OrigMessage]" doc:name="Set Payload to Original"/>
+        </catch-exception-strategy>
+    </flow>
+</mule>

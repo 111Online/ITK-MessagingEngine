@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  -->
+<mule xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" 
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+	xmlns:https="http://www.mulesoft.org/schema/mule/https" 
+	xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" 
+	xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd
+http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd">
+    <custom-transformer class="OctopusConsortium.Core.Transformers.ITK.ITKCertificateRevocationTransformer" name="ITKCertificateRevocationTransformer" doc:name="Java">
+        <spring:property name="CRLURL" value="${application.gp111.crlURL}"/>
+    </custom-transformer>
+    <http:request-config name="HTTP_Request_Configuration_DOS_Proxy_HTTPS"  host="${services.dos.proxy.endpoint.host}" port="${services.dos.proxy.port}" doc:name="HTTP Request Configuration" protocol="HTTPS">
+        <tcp:client-socket-properties connectionTimeout="30000"/>
+    </http:request-config>
+    <http:request-config name="HTTP_Request_Configuration_DOS_Proxy_HTTP"  host="${services.dos.proxy.endpoint.host}" port="${services.dos.proxy.port}" doc:name="HTTP Request Configuration" >
+        <tcp:client-socket-properties connectionTimeout="30000"/>
+    </http:request-config>
+    <http:request-config name="HTTP_Request_Configuration_DOS_HTTPS" protocol="HTTPS" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" connectionIdleTimeout="10000" doc:name="HTTP Request Configuration" basePath="/"/>
+    <ws:consumer-config name="Web_Service_Consumer_Dos" wsdlLocation="schemas/DOS1_3/wsdl/DosWebservices1_3.wsdl" service="PathWayService" port="PathWayServiceSoap12" serviceAddress="https://www.pathwaysdos.nhs.uk/app/api/webservices" doc:name="Web Service Consumer"/>
+    <flow name="query_dos_getEndpointStatus" >
+        <logger message="Starting GetEndpointStatus" level="DEBUG" category="DosGetEndpointStatus" doc:name="Logger"/>
+        <logger level="DEBUG" category="GP lookp disabled" doc:name="GP lookup disabled"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.getPatient()!=null &amp;&amp; true != true]">
+                <set-variable variableName="getPatientDetailsResponse" value="#[payload]" doc:name="Save Patient"/>
+                <flow-ref name="query_dos_getservicedetails" doc:name="Get Service Detilas"/>
+                <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.ServiceDetailsResponseToNhs111Endpoints" doc:name="ServiceDetailsResponseToNhs111Endpoints"/>
+                <choice doc:name="GP Endpoints">
+                    <when expression="payload.getEndpoints().size() != 0">
+                        <set-payload value="#[variable:getPatientDetailsResponse]" doc:name="Set to Patient Response"/>
+                        <scripting:transformer doc:name="Set patient's gp endpoint as listed">
+                            <scripting:script engine="Groovy"><![CDATA[payload.setGpEndpointStatus(OctopusConsortium.Service.Models.IdentifyPatientResponseGPEndpointStatus.GP_ENDPOINT_LISTED)
+payload]]></scripting:script>
+                        </scripting:transformer>
+                    </when>
+                    <otherwise>
+                        <set-payload value="#[variable:getPatientDetailsResponse]" doc:name="Set to Patient Response"/>
+                        <scripting:transformer doc:name="Set no gp endpoint found">
+                            <scripting:script engine="Groovy"><![CDATA[payload.setGpEndpointStatus(OctopusConsortium.Service.Models.IdentifyPatientResponseGPEndpointStatus.NO_GP_ENDPOINT_LISTED)
+payload]]></scripting:script>
+                        </scripting:transformer>
+                    </otherwise>
+                </choice>
+            </when>
+            <otherwise>
+                <set-payload value="#[payload]" doc:name="No patient - Confirm Payload"/>
+            </otherwise>
+        </choice>
+        <choice-exception-strategy doc:name="Choice Exception Strategy">
+            <catch-exception-strategy doc:name="Catch Exception Strategy" when="exception.causedBy(org.mule.api.transformer.TransformerException)">
+                <set-payload value="#[flowVars['getPatientDetailsResponse']]" doc:name="Reset Payload to variable"/>
+                <scripting:transformer doc:name="Set Status" doc:description="Carry on regardless">
+                    <scripting:script engine="Groovy"><![CDATA[payload.setGpEndpointStatus(OctopusConsortium.Service.Models.IdentifyPatientResponseGPEndpointStatus.NO_GP_ENDPOINT_LISTED)
+payload]]></scripting:script>
+                </scripting:transformer>
+            </catch-exception-strategy>
+        </choice-exception-strategy>
+    </flow>
+
+    <flow name="query_dosFlowSendITKendpoint"  doc:description="Sends a payload to a specified ITK endpoint.
+
+Assumes the following variables are set:
+#[header:outbound:EndpointUrl]
+#[header:outbound:EndpointHost]
+#[header:outbound:EndpointPort]
+#[header:outbound:EndpointHost]">
+        <logger message="Starting Send ITK Endpoint Flow #[header:outbound:EndpointHost]" level="INFO" doc:name="Start" category="DosSendITKendpoint"/>
+        <set-variable variableName="starttime" value="#[System.currentTimeMillis()]" doc:name="Set starttime"/>
+
+        <flow-ref name="query_dos_WrapCDAInEnvelopes" doc:name="Wrap CDA in Envelopes"/>
+
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <flow-ref name="message_logging_SendNHS111Request" doc:name="Log 111 Request"/>
+
+        <logger message="SendingPayload = #[payload]" level="DEBUG" category="DosSendITKendpoint" doc:name="SendingMessage"/>
+        <logger message="EndpointUrl = #[header:outbound:EndpointUrl]
+EndpointHost = #[header:outbound:EndpointHost]
+EndpointPort = #[header:outbound:EndpointPort]
+EndpointHost = #[header:outbound:EndpointHost]
+payload = #[payload]
+messageid = #[message.id]" level="DEBUG" doc:name="GP Details" category="DosSendITKendpoint"/>
+        <message-properties-transformer doc:name="Set SOAP Action">
+            <add-message-property key="SOAPAction" value="urn:nhs-itk:services:201005:SendNHS111Report-v2-0"/>
+            <add-message-property key="Content-Type" value="text/xml"/>
+        </message-properties-transformer>
+        <choice doc:name="Choice">
+            <when expression="#[message.outboundProperties.?EndpointProtocol == 'http']">
+                <processor-chain doc:name="Processor Chain">
+                    <logger message="HTTP #[header:outbound:EndpointHost] #[header:outbound:EndpointPort] #[header:outbound:EndpointPath]" level="INFO" doc:name="Logger"/>
+                    <http:request config-ref="HTTP_Request_Configuration_HTTP_Test" path="#[header:outbound:EndpointPath]" method="POST" host="#[header:outbound:EndpointHost]" port="#[header:outbound:EndpointPort]" requestStreamingMode="ALWAYS" doc:name="ITK HTTP (Test)"/>
+
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <choice doc:name="Proxy check">
+                        <when expression="'${application.proxy.gp111.endpoint}' !=null and '${application.proxy.gp111.endpoint}' != '' ">
+                            <logger level="INFO" doc:name="Log skip cert check" message="Skipping ITK cert check due to proxy"/>
+
+                            <!-- 
+                            <https:outbound-endpoint exchange-pattern="request-response" host="#[header:outbound:EndpointHost]" port="#[header:outbound:EndpointPort]" path="#[header:outbound:EndpointPath]" method="POST" connector-ref="HTTP_HTTPS_Proxy" responseTimeout="30000" doc:name="HTTPS via Proxy"/>
+                            -->
+                            <http:request config-ref="HTTPS_Request_Configuration_Proxy_Live" path="#[header:outbound:EndpointPath]" method="POST" host="#[header:outbound:EndpointHost]" port="#[header:outbound:EndpointPort]" doc:name="ITK HTTPS via Proxy"/>
+                        </when>
+                        <otherwise>
+                            <logger message="Validating ITK endpoint certificate" level="INFO" doc:name="Validating ITK endpoint certificate"/>
+                            <set-variable variableName="ITKPayload" value="#[payload]" doc:name="Store payload"/>
+                            <custom-transformer class="OctopusConsortium.Core.Transformers.ITK.ITKCertificateValidationTransformer" doc:name="Perform Cert Check">
+                                <spring:property name="DNSProviderHostName" value="${application.n3.dnsserver}"/>
+                                <spring:property name="KeystorePassword" value="${application.gp111.keystorepassword}"/>
+                                <spring:property name="KeystorePath" value="${application.gp111.keystorepath}"/>
+                                <spring:property name="TruststorePassword" value="${application.gp111.truststorepassword}"/>
+                                <spring:property name="TruststorePath" value="${application.gp111.truststorepath}"/>
+                            </custom-transformer>
+                            <choice doc:name="Choice">
+                                <when expression="'${application.gp111.crlURL}' !=null and '${application.gp111.crlURL}' != '' ">
+                                    <logger message="Cert list found - performing cert check" level="INFO" doc:name="Logger Perform Cert Check"/>
+                                    <transformer ref="ITKCertificateRevocationTransformer" doc:name="Perform revocation check"/>
+                                </when>
+                                <otherwise>
+                                    <logger message="No cert list" level="INFO" doc:name="Logger No Cert List"/>
+                                </otherwise>
+                            </choice>
+                            <set-payload value="#[variable:ITKPayload]" doc:name="Set Payload"/>
+                            <logger message="HTTPS #[header:outbound:EndpointHost] #[header:outbound:EndpointPort] #[header:outbound:EndpointPath]" level="INFO" doc:name="Log Url"/>
+                            <https:outbound-endpoint exchange-pattern="request-response" host="#[header:outbound:EndpointHost]" port="#[header:outbound:EndpointPort]" path="#[header:outbound:EndpointPath]" method="POST" connector-ref="HTTP_HTTPS" responseTimeout="60000" doc:name="ITK HTTPS NWW"/>
+                        </otherwise>
+                    </choice>
+
+                    
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+
+        <flow-ref name="message_logging_SendNHS111Response" doc:name="message_logging_SendNHS111Response"/>
+
+        <logger message="itkServiceCallElapsed = #[System.currentTimeMillis() - flowVars['starttime']]ms.
+payload = #[payload]" level="DEBUG" doc:name="itkServiceCallElapsed" category="DosSendITKendpoint"/>
+
+        <logger message="current payload = #[payload]" level="DEBUG" category="DosSendITKendpoint" doc:name="Received"/>        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" doc:name="Extract payload from soap message" doc:description="read the response and convert to extract response">
+
+<mulexml:xslt-text>
+            <xsl:stylesheet version="2.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:soap2="http://www.w3.org/2003/05/soap-envelope"
+    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:urn="urn:nhs-itk:ns:201005">
+  <xsl:output method="text" version="1.0" encoding="UTF-8" indent="yes"/>
+ <xsl:template match="text()" />
+    <xsl:template match="/">
+        <xsl:apply-templates select="soap:Envelope/soap:Body/*"/>
+        <xsl:apply-templates select="soap2:Envelope/soap2:Body/*"/>
+    </xsl:template>
+    <xsl:template match="urn:SimpleMessageResponse">        
+         SimpleMessageResponse: <xsl:value-of select="."/>
+    </xsl:template>
+    <xsl:template match="soap2:Fault">
+	Error: faultcode=<xsl:copy-of select="./soap2:Code"/> : <xsl:copy-of select="./soap2:Reason"/>
+    </xsl:template>
+    <xsl:template match="soap:Fault">
+	Error: faultcode=<xsl:copy-of select="./faultcode"/> : <xsl:copy-of select="./faultstring"/> 
+    </xsl:template>    
+</xsl:stylesheet></mulexml:xslt-text>
+
+        </mulexml:xslt-transformer>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <choice doc:name="Choice" >
+            <when expression="#[payload.trim().startsWith('Error:')]">
+                <set-payload value="#['&lt;fail&gt;&lt;/fail&gt;']" doc:name="Set Payload"/>
+                <scripting:component doc:name="SoapFault">
+                    <scripting:script engine="Groovy"><![CDATA[import OctopusConsortium.Core.ExternalServiceException;
+
+OctopusConsortium.Core.ExternalServiceException ex = new OctopusConsortium.Core.ExternalServiceException(payload);
+throw ex;]]></scripting:script>
+                </scripting:component>
+            </when>
+            <when expression="#[payload.trim().startsWith('SimpleMessageResponse:')]">
+                <scripting:transformer doc:name="Remove prefix">
+                    <scripting:script engine="Groovy"><![CDATA[int index = payload.indexOf(":");
+payload = payload.substring(index + 2,payload.length());
+
+return payload]]></scripting:script>
+                </scripting:transformer>
+            </when>
+            <otherwise>
+                <set-payload value="#['&lt;fail&gt;&lt;/fail&gt;']" doc:name="Set Payload"/>
+                <scripting:component doc:name="Error">
+                    <scripting:script engine="Groovy"><![CDATA[import javax.xml.soap.SOAPException;
+import groovy.util.logging.*;
+OctopusConsortium.Core.ExternalServiceException;
+
+log.error "unexpected payload: " + payload;
+
+OctopusConsortium.Core.ExternalServiceException ex = new OctopusConsortium.Core.ExternalServiceException("unexpected payload");
+throw ex;]]>
+</scripting:script>
+                </scripting:component>
+            </otherwise>
+        </choice>
+        <logger message="payload = #[payload]" level="DEBUG" doc:name="Payload"/>
+        <remove-variable variableName="starttime" doc:name="remove starttime"/>
+         <choice-exception-strategy doc:name="Choice Exception Strategy" >
+            <catch-exception-strategy doc:name="Catch Exception Strategy" >
+                <logger message="Call to endpoint failed, and caught" level="ERROR" doc:name="Logger"/>
+                <set-payload value="#['&lt;fail&gt;&lt;/fail&gt;']" doc:name="Set Payload to failure"/>
+
+            </catch-exception-strategy>
+        </choice-exception-strategy>
+ 
+    </flow>
+    <sub-flow name="query_dos_WrapCDAInEnvelopes">
+        <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.DistributionEnvelopeV2ToXml" doc:name="DistributionEnvelopeV2ToXml"/>
+        <choice doc:name="Choice">
+            <when expression="'${application.proxy.gp111.endpoint}' !=null and '${application.proxy.gp111.endpoint}' != '' ">
+                <mulexml:xslt-transformer xsl-file="xsl/itk_soap.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT soap envelope - Endpoint Overridden">
+                    <mulexml:context-property key="createdTime" value="#[server.dateTime.format()]"/>
+                    <mulexml:context-property key="expiredTime" value="#[server.dateTime.plusMinutes(5).format()]"/>
+                    <mulexml:context-property key="toVirtualUri" value="#[header:outbound:RecipientEndpointUrl]"/>
+                    <mulexml:context-property key="messageID" value="#[java.util.UUID.randomUUID().toString()]"/>
+                    <mulexml:context-property key="action" value="urn:nhs-itk:services:201005:SendNHS111Report-v2-0"/>
+                </mulexml:xslt-transformer>
+            </when>
+            <otherwise>
+                <mulexml:xslt-transformer xsl-file="xsl/itk_soap.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT soap envelope">
+                    <mulexml:context-property key="createdTime" value="#[server.dateTime.format()]"/>
+                    <mulexml:context-property key="expiredTime" value="#[server.dateTime.plusMinutes(5).format()]"/>
+                    <mulexml:context-property key="toVirtualUri" value="#[header:outbound:EndpointUrl]"/>
+                    <mulexml:context-property key="messageID" value="#[java.util.UUID.randomUUID().toString()]"/>
+                    <mulexml:context-property key="action" value="urn:nhs-itk:services:201005:SendNHS111Report-v2-0"/>
+                </mulexml:xslt-transformer>
+            </otherwise>
+        </choice>
+        <logger message="itkDistributionEnvelopeXsltElapsed = #[System.currentTimeMillis() - flowVars['starttime']]ms." level="DEBUG" category="DosSendITKendpoint" doc:name="itkDistributionEnvelopeXsltElapsed"/>
+    </sub-flow>
+    <flow name="query_dos_checkcapacitysummary" >
+        <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.EncounterResponseToDosCheckCapacitySummary" doc:name="ToDosCheckCapacitySummary">
+            <spring:property name="Username" value="${services.dos.username}"/>
+            <spring:property name="Password" value="${services.dos.password}"/>
+        </custom-transformer>
+        <cxf:jaxws-client operation="CheckCapacitySummary" clientClass="OctopusConsortium.DosService.PathWayService" port="PathWayServiceSoap12" wsdlLocation="${services.dos.wsdllocation}" doc:name="CheckCapacitySummary"/>
+        <flow-ref name="message_logging_CheckCapacitySummaryRequest" doc:name="Log request"/>
+        <choice doc:name="Choice">
+            <when expression="'${services.dos.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" path="${services.dos.endpoint.path}" doc:name="HTTP"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <https:outbound-endpoint exchange-pattern="request-response" method="POST" ref="HTTP_Pathways" doc:name="HTTPS"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+        <flow-ref name="message_logging_CheckCapacitySummaryResponse" doc:name="Log Response"/>
+    </flow>
+    <sub-flow name="query_dos_getservicedetails"  doc:description="Queries for GP endpoints">
+    	<custom-transformer class="OctopusConsortium.Core.Transformers.DoS.EncounterResponseToDosServiceDetailsRequest" doc:name="ToDosServiceDetailsRequest">
+            <spring:property name="Password" value="${services.dos.password}"/>
+            <spring:property name="Username" value="${services.dos.username}"/>
+
+        </custom-transformer>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.ServiceDetailsRequestToXml" doc:name="ServiceDetailsRequestToXml"/>
+        <mulexml:xslt-transformer xsl-file="xsl/dos_soap.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT Wrap in Soap Envelope">
+            <mulexml:context-property key="serviceVersion" value="${services.dos.serviceversion}"/>
+            <mulexml:context-property key="action" value="https://nww.pathwaysdos.nhs.uk/app/api/webservices/ServiceDetailsById"/>
+        </mulexml:xslt-transformer>
+        <message-properties-transformer doc:name="SOAP Action &amp; Content Type">
+            <add-message-property key="SOAPAction" value="https://nww.pathwaysdos.nhs.uk/app/api/webservices/ServiceDetailsById"/>
+            <add-message-property key="Content-Type" value="text/xml"/>
+        </message-properties-transformer>
+        <flow-ref name="message_logging_ServiceDetailsByIdRequest" doc:name="Log Request"/>
+        <choice doc:name="Choice" >
+            <when expression="'${services.dos.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" path="${services.dos.endpoint.path}" doc:name="HTTP" method="POST"/>
+                </processor-chain>
+            </when>
+            <when expression="'${services.dos.endpoint.protocol}' == 'https_new'">
+                <processor-chain doc:name="Processor Chain">
+                    <scripting:transformer doc:name="Groovy - convert to object array">
+                        <scripting:script engine="Groovy"><![CDATA[def newPayload = new Object[2];
+newPayload[0] = payload.getUserInfo();
+newPayload[1] = payload.getServiceId();
+return newPayload;]]></scripting:script>
+                    </scripting:transformer>
+                    <cxf:jaxws-client operation="ServiceDetailsById" clientClass="OctopusConsortium.DosService1_3.PathWayService" port="PathWayServiceSoap12" wsdlLocation="${services.dos.wsdllocation}" doc:name="SOAP"/>
+                    <http:request config-ref="HTTP_Request_Configuration_DOS_HTTPS" path="${services.dos.endpoint.path}" method="POST" sendBodyMode="ALWAYS" parseResponse="false" doc:name="HTTPS"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <https:outbound-endpoint exchange-pattern="request-response" method="POST" ref="HTTP_Pathways" doc:name="HTTPS"/>
+            </otherwise>
+        </choice>
+        <flow-ref name="message_logging_ServiceDetailsByIdResponse" doc:name="Log Response"/>
+        <mulexml:xslt-transformer xsl-file="xsl/dos_soap_extract.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT Extract Body from Envelope"/>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.XmlToServiceDetailsResponse" doc:name="Xml to ServiceDetailsById Response"/>
+       
+        
+    </sub-flow>
+    <sub-flow name="query_dos_getservicedetails_with_proxy" doc:description="Queries for GP endpoints">
+        <custom-transformer class="OctopusConsortium.Core.Transformers.DoS.Proxy.EncounterResponseToDosProxyServiceDetailsRequest" doc:name="ToDosProxyServiceDetailsRequest">
+            <spring:property name="Password" value="${services.dos.proxy.password}"/>
+            <spring:property name="ServiceVersion" value="${services.dos.proxy.serviceversion}"/>
+            <spring:property name="Username" value="${services.dos.proxy.username}"/>
+        </custom-transformer>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <flow-ref name="message_logging_ServiceDetailsByIdRequest_Proxy" doc:name="Log Request"/>
+        <choice doc:name="Protocol">
+            <when expression="'${services.dos.proxy.protocol}' == 'http'">
+                <http:request config-ref="HTTP_Request_Configuration_DOS_Proxy_HTTP" path="${services.dos.proxy.endpoint.path.getservicedetailsbyid}" method="POST" sendBodyMode="ALWAYS" doc:name="HTTP">
+                    <http:request-builder>
+                        <http:header headerName="Content-Type" value="application/json"/>
+                        <http:header headerName="via" value="http"/>
+                    </http:request-builder>
+                </http:request>
+            </when>
+            <otherwise>
+                <http:request config-ref="HTTP_Request_Configuration_DOS_Proxy_HTTPS" path="${services.dos.proxy.endpoint.path.getservicedetailsbyid}" method="POST" sendBodyMode="ALWAYS" doc:name="HTTPS">
+                    <http:request-builder>
+                        <http:header headerName="Content-Type" value="application/json"/>
+                        <http:header headerName="via" value="https"/>
+                    </http:request-builder>
+                </http:request>
+            </otherwise>
+        </choice>
+        <flow-ref name="message_logging_ServiceDetailsByIdResponse_Proxy" doc:name="Log Response"/>
+        <json:json-to-object-transformer returnClass="OctopusConsortium.Models.DOS.Proxy.Response.Services" doc:name="JSON to Object"/>
+    </sub-flow>
+    
+</mule>

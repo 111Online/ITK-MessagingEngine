@@ -1,0 +1,13 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:nhs-itk:ns:201005">
+  <soapenv:Body>
+    <soapenv:Fault>
+      <faultcode>1000</faultcode>
+      <faultstring>Invalid Message (There is something incorrect with the message structure or content)</faultstring>     
+      <!--Optional:-->
+      <detail>
+        <urn:ToolkitErrorInfo/>
+        <!--You may enter ANY elements at this point-->
+      </detail>
+    </soapenv:Fault>
+  </soapenv:Body>
+</soapenv:Envelope>

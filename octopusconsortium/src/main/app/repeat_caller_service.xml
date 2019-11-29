@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="CE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+    
+    <sub-flow name="Repeat_Caller_SubFlow_Query" doc:name="Repeat_Caller_SubFlow_Query">
+        <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.IdentifyPatientResponseToRepeatCallerQuery" doc:name="IdentifyPatientResponse To RepeatCallerQuery">
+            <spring:property name="orgName" value="${info.org.name}"/>
+			<spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.ToDistributionEnvelope" doc:name="To DistributionEnvelope">
+        	<spring:property name="orgName" value="${info.org.name}"/>
+			<spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+        <flow-ref name="Repeat_Caller_SubFlow_Query_Submit" doc:name="service call"/>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.DistributionEnvelopeV2ToRepeatCallerQueryResponse" doc:name="Extract payload"/>
+    </sub-flow>
+    <sub-flow name="Repeat_Caller_SubFlow_Query_Submit" doc:name="Repeat_Caller_SubFlow_Query_Submit">
+        <set-session-variable variableName="Track" value="submit repeat caller" doc:name="Track"/>
+        <logger message="Querying repeat caller" level="INFO" doc:name="Logger"/>
+        <cxf:jaxws-client configuration-ref="CXF_ConfigurationWsAddressing" operation="NHS111RepeatCallerSyncQueryResp-v1-0" clientClass="OctopusConsortium.RepeatCallerServiceV1.NHS111" port="NHS111RepeatCallerSyncQueryResp_pttPort" wsdlLocation="${services.rps.wsdllocation}" doc:name="SOAP"/>
+        <message-properties-transformer doc:name="Message Properties">
+            <add-message-property key="http.version" value="HTTP/1.0"/>
+        </message-properties-transformer>
+        <flow-ref name="Submit_To_Repeat_Caller_Endpoint" doc:name="Flow Reference"/>
+    </sub-flow>
+    <sub-flow name="Repeat_Caller_SubFlow_Report" doc:name="Repeat_Caller_SubFlow_Report">
+        <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.ToRepeatCallerCDA_UK" doc:name="ToRepeatCallerCDA_UK">
+            <spring:property name="CdaNarritive" value="#[variable:CdaNarritive]"/>
+            <spring:property name="orgName" value="${info.org.name}"/>
+			<spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+        <message-properties-transformer overwrite="true" doc:name="Message Properties">
+            <add-message-property key="interactionId" value="urn:nhs-itk:interaction:primaryRepeatCallerRepositoryRecipientNHS111CDADocument-v2-0"/>
+        </message-properties-transformer>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.RCS.ToDistributionEnvelope" doc:name="To DistributionEnvelope">
+        	<spring:property name="orgName" value="${info.org.name}"/>
+			<spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+        <logger message="Repeat Caller before submit call. messageid = #[message.id]" level="DEBUG" doc:name="Logger" category="RepeatCaller"/>
+        <flow-ref name="Repeat_Caller_SubFlow_Report_Submit" doc:name="Submit"/>
+        <logger message="repeatCallerResponse  messageid = #[message.id] payload = #[payload]" level="DEBUG" doc:name="Logger" category="RepeatCaller"/>
+    </sub-flow>
+    <sub-flow name="Repeat_Caller_SubFlow_Report_Submit" doc:name="Repeat_Caller_SubFlow_Report_Submit">
+        <cxf:jaxws-client configuration-ref="CXF_ConfigurationWsAddressing" operation="SendNHS111Report-v2-0" clientClass="OctopusConsortium.RepeatCallerServiceV1.NHS111" port="SendNHS111Report-v2-0_pttPort" doc:name="SOAP" wsdlLocation="${services.rps.wsdllocation}">
+            <cxf:outInterceptors>
+                <!-- <spring:ref bean="WSAddressingInterceptor"/> -->
+            </cxf:outInterceptors>
+        </cxf:jaxws-client>
+        <message-properties-transformer doc:name="Message Properties">
+            <add-message-property key="http.version" value="HTTP/1.0"/>
+        </message-properties-transformer>
+        <flow-ref name="Submit_To_Repeat_Caller_Endpoint" doc:name="Flow Reference"/>
+    </sub-flow>
+    <flow name="Submit_HaSC_To_Repeat_Caller_Service" doc:name="Submit_HaSC_To_Repeat_Caller_Service">
+        <flow-ref name="Repeat_Caller_SubFlow_Report" doc:name="Report"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload == 'Success']">
+                <processor-chain doc:name="Processor Chain">
+                    <set-property propertyName="RepeatCallerSendStatus" value="#[true]" doc:name="RepeatCallerSendStatus Success"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <set-property propertyName="RepeatCallerSendStatus" value="#[false]" doc:name="RepeatCallerSendStatus Fail"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="Submit_Query_To_Repeat_Caller_Service" doc:name="Submit_Query_To_Repeat_Caller_Service">
+        <choice doc:name="Choice">
+            <when expression="#[true]">
+                <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.UNDETERMINED]" doc:name="Property"/>
+                <expression-transformer expression="#[false]" doc:name="Disabled returning false"/>
+            </when>
+            <otherwise>
+                <set-variable variableName="RepeatCallerRequest" value="#[payload]" doc:name="Variable"/>
+                <flow-ref name="Repeat_Caller_SubFlow_Query" doc:name="Query"/>
+                <choice doc:name="Choice">
+                    <when expression="#[payload.getValue().getCode() == &quot;RC&quot;]">
+                        <processor-chain doc:name="Processor Chain">
+                            <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.PATIENT_IS_REPEAT_CALLER]" doc:name="Match"/>
+                        </processor-chain>
+                    </when>
+                    <when expression="#[payload.getValue().getCode() == &quot;NRC&quot;]">
+                        <processor-chain doc:name="Processor Chain">
+                            <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.PATIENT_IS_NOT_REPEAT_CALLER]" doc:name="No Match"/>
+                        </processor-chain>
+                    </when>
+                    <when expression="#[payload.getValue().getCode() == &quot;PRC&quot;]">
+                        <processor-chain doc:name="Processor Chain">
+                            <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.UNDETERMINED]" doc:name="Potential"/>
+                        </processor-chain>
+                    </when>
+                    <when expression="#[payload.getValue().getCode() == &quot;IIQ&quot;]">
+                        <processor-chain doc:name="Processor Chain">
+                            <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.INSUFFICIENT_INFORMATION); r.setOverallStatus(OctopusConsortium.Service.Models.SubmitEncounterResponseOverallStatus.SUCCESSFUL_CALL_TO_GP_WEBSERVICE]" doc:name="Insufficient Info"/>
+                        </processor-chain>
+                    </when>
+                    <otherwise>
+                        <processor-chain doc:name="Processor Chain">
+                            <set-property propertyName="RepeatCallerStatus" value="#[OctopusConsortium.Service.Models.RepeatCallerStatus.INSUFFICIENT_INFORMATION]" doc:name="Error"/>
+                            <scripting:transformer doc:name="Error">
+                                <scripting:script engine="Groovy">
+                                    <scripting:text><![CDATA[//def r = new OctopusConsortium.Service.Models.SubmitEncounterResponse();
+                                                                                                                                                                                                                                                                                        //r.setRepeatCallerStatus(OctopusConsortium.Service.Models.RepeatCallerStatus.INSUFFICIENT_INFORMATION); 
+                                                                                                                                                                                                                                                                                        //r.getErrors().add("problem quering repeat caller service");
+                                                                                                                                                                                                                                                                                        //payload = r;
+                                                                                                                                                                                                                                                                                        payload]]></scripting:text>
+                                </scripting:script>
+                            </scripting:transformer>
+                        </processor-chain>
+                    </otherwise>
+                </choice>
+            </otherwise>
+        </choice>
+        <choice-exception-strategy doc:name="Choice Exception Strategy">
+            <catch-exception-strategy doc:name="Catch Exception Strategy">
+                <scripting:component doc:name="Groovy">
+                    <scripting:script engine="Groovy"><![CDATA[import groovy.util.logging.*
+
+String error = "Problem with repeat caller service call." + payload
+
+log.error error
+def ex = new OctopusConsortium.Core.ExternalServiceException(error);
+throw ex
+]]></scripting:script>
+                </scripting:component>
+            </catch-exception-strategy>
+        </choice-exception-strategy>
+    </flow>
+    <sub-flow name="Submit_To_Repeat_Caller_Endpoint" doc:name="Submit_To_Repeat_Caller_Endpoint">
+        <choice doc:name="Choice">
+            <when expression="'${services.rps.endpoint.protocol}' == 'http'">
+                <processor-chain doc:name="Processor Chain">
+                    <http:outbound-endpoint exchange-pattern="request-response" host="${services.rps.endpoint.host}" port="${services.rps.endpoint.port}" path="${services.rps.endpoint.path}" doc:name="HTTP"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <https:outbound-endpoint exchange-pattern="request-response" host="${services.rps.endpoint.host}" port="${services.rps.endpoint.port}" path="${services.rps.endpoint.path}" connector-ref="HTTP_HTTPS" doc:name="HTTPS"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </sub-flow> 
+</mule>

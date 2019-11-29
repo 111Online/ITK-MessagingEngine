@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="libs/jaxb/jaxb-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/joda-time-2.0.jar"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry excluding="cacerts-old.jks|config.properties.Live|config.properties.dev|config.properties.dev.bak|config.properties.uat|log4j.xml.dev|log4j.xml.live|log4j.xml.uat|log4j2.xml.dev|log4j2.xml.live" kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/app"/>
+	<classpathentry kind="src" path="src/test/java"/>
+	<classpathentry kind="src" path="src/test/resources"/>
+	<classpathentry exported="true" kind="lib" path="libs/commons-beanutils-1.8.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/sqljdbc4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Mockito/separate-jars/com.springsource.org.objenesis-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Mockito/separate-jars/mockito-core-1.9.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/commons-cli-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/httpcore-4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/httpcore-ab-4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/httpcore-nio-4.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/wiremock-1.36.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/httpclient-4.3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/jackson-databind-2.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/jackson-core-2.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/guava-15.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wiremock/jackson-annotations-2.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/webservice_common-1.1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/smsp_webcommon-1.1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/assist-time-1.0.9-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/smsp_webclient-1.1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mockrunner-core-0.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mockrunner-jdbc-0.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/Qxlva/generic_webservice_objects-1.1.7.jar"/>
+	<classpathentry kind="lib" path="libs/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="libs/FlyingSaucer/core-renderer-minimal.jar"/>
+	<classpathentry exported="true" kind="con" path="MULE_RUNTIME/org.mule.tooling.server.3.8.0"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

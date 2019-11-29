@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title type="text">NHS Choices - CO49333</title>
+	<id>http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/co49333</id>
+	<rights type="text">© Crown Copyright 2009</rights>
+	<updated>2013-12-10T14:58:21Z</updated>
+	<category term="Service" />
+	<logo>http://www.nhs.uk/nhscwebservices/documents/logo1.jpg</logo>
+	<author>
+		<name>NHS Choices</name>
+		<uri>http://www.nhs.uk</uri>
+		<email>webservices@nhschoices.nhs.uk</email>
+	</author>
+	<link rel="self" type="application/xml" title="NHS Choices - CO49333" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/CO49333?apikey=NAYAAIKT" />
+	<link rel="alternate" title="NHS Choices - CO49333" href="http://www.nhs.uk/Services/pharmacies/PctServices/DefaultView.aspx?id=3903" />
+	<tracking xmlns="http://syndication.nhschoices.nhs.uk/services">&lt;img style="border: 0; width: 1px; height: 1px;" alt="" src="http://statse.webtrendslive.com/dcss9yzisf9xjyg74mgbihg8p_8d2u/njs.gif?dcsuri=/services%2ftypes%2fsrv0158%2fCO49333&amp;amp;wt.js=no&amp;amp;wt.cg_n=syndication"/&gt;</tracking>
+	<complete xmlns="http://purl.org/syndication/history/1.0"/>
+	<entry>
+		<id>http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/co49333</id>
+		<title type="text">Pharmacy services - Clockwork Pharmacy</title>
+		<updated>2010-11-12T05:20:22Z</updated>
+		<link rel="self" title="Pharmacy services - Clockwork Pharmacy" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/CO49333?apikey=NAYAAIKT" />
+		<link rel="alternate" title="Pharmacy services - Clockwork Pharmacy" href="http://www.nhs.uk/Services/pharmacies/PctServices/DefaultView.aspx?id=3903" />
+		<content type="application/xml">
+			<s:service xmlns:s="http://syndication.nhschoices.nhs.uk/services">
+				<s:type code="SRV0158" indexLetter="P">Pharmacy services</s:type>
+				<s:deliverer link="http://v1.syndication.nhschoices.nhs.uk/organisations/pharmacies/25325?apikey=NAYAAIKT" indexLetter="C">Clockwork Pharmacy</s:deliverer>
+				<s:parent link="http://v1.syndication.nhschoices.nhs.uk/organisations/localareateams/463137?apikey=NAYAAIKT">North East London Area Team</s:parent>
+				<s:summaryText/>
+				<s:photo/>
+				<s:phone>020 76074525        </s:phone>
+				<s:fax>0207 6074525</s:fax>
+				<s:address>
+					<s:addressLine>273 Caledonian Road</s:addressLine>
+					<s:addressLine>London</s:addressLine>
+					<s:postcode>N1 1EF</s:postcode>
+				</s:address>
+				<s:geographicCoordinates>
+					<s:longitude>-0.118218541145325</s:longitude>
+					<s:latitude>51.5397987365723</s:latitude>
+				</s:geographicCoordinates>
+				<s:team/>
+				<s:thingsShouldKnow/>
+				<s:gpReferral>
+					<s:required>False</s:required>
+					<s:text/>
+				</s:gpReferral>
+			</s:service>
+		</content>
+	</entry>
+</feed>

@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="octopusconsortium">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../../tools/MuleStudio-for-win-64bit-3.4.0/MuleStudio"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="Mule Runtime [Mule Server 3.4.0 CE].libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/commons-cli-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/log4j-1.2.16.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/mule-module-boot-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/mule-module-logging-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/mule-module-reboot-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/boot/wrapper-3.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/endorsed/xalan-2.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/endorsed/xercesImpl-2.9.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/endorsed/xml-apis-1.3.04.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/endorsed/xml-serializer-2.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-common-0.11.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-core-3.4.0-tests.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-core-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-annotations-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-atom-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-bpm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-builders-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-client-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-cxf-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-devkit-support-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-drools-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-jaas-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-jbossts-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-jbpm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-jersey-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-json-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-launcher-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-management-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-ognl-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-pgp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-rss-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-scripting-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-spring-config-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-spring-extras-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-spring-security-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-sxc-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-tomcat-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-module-xml-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-pattern-core-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-tools-anttasks-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-ajax-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-ejb-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-email-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-file-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-ftp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-http-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-jdbc-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-jetty-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-jms-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-multicast-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-quartz-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-rmi-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-servlet-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-sftp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-ssl-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-stdio-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-tcp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-udp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-vm-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/mule/mule-transport-xmpp-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-client-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-core-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-i18n-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-parser-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-server-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/abdera-spring-0.4.0-incubating.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/activation-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/annotations-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/ant-1.7.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/ant-launcher-1.7.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/antlr-3.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/aopalliance-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/asm-3.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/asm-commons-3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/asm-tree-3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/aspectjrt-1.6.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/aspectjweaver-1.6.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/axiom-api-1.2.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/axiom-impl-1.2.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/bcmail-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/bcpg-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/bcprov-ext-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/bcprov-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/bctsp-jdk16-1.46.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cglib-nodep-2.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cometd-api-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cometd-server-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-beanutils-1.8.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-codec-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-collections-3.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-dbutils-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-httpclient-3.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-io-1.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-jxpath-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-lang-2.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-net-2.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/commons-pool-1.5.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-api-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-common-utilities-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-bindings-soap-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-bindings-xml-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-core-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-databinding-aegis-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-databinding-jaxb-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-databinding-jibx-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-frontend-jaxws-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-frontend-simple-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-management-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-transports-common-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-transports-http-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-transports-local-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-ws-addr-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-ws-rm-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-rt-ws-security-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-tools-common-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/cxf-wstx-msv-validation-2.5.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/dom4j-1.6.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/drools-api-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/drools-compiler-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/drools-core-5.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/el-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-annotation_1.0_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-ejb_2.1_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-j2ee-connector_1.5_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-j2ee-management_1.0_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-jms_1.1_spec-1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-jta_1.1_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/groovy-all-1.8.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/hamcrest-core-1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/hibernate-commons-annotations-3.2.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/hibernate-core-3.6.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/isorelax-20030108.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jackson-core-asl-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jackson-jaxrs-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jackson-mapper-asl-1.9.11.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jackson-xc-1.7.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jasper-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jasper-el-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jasper-jdt-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/javassist-3.7.ga.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jaxb-api-2.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jaxb-impl-2.1.9-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jaxb-xjc-2.1.9-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jaxen-1.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jaxws-api-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jboss-logging-3.0.0.Beta5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jbossjta-4.15.0.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jbpm-api-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jbpm-jpdl-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jbpm-log-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jbpm-pvm-4.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jcifs-1.3.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jdom-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jersey-client-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jersey-core-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jersey-json-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jersey-server-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jetty-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jetty-annotations-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jetty-plus-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jetty-util-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jetty-util5-6.1.26.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jgrapht-jdk1.5-0.7.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jibx-extras-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jibx-run-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jibx-schema-1.2.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/joda-time-1.6.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jsch-0.1.44-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jsp-api-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jsr181-api-1.0-MR1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jsr250-api-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jta-1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/juel-engine-2.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/juel-impl-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/jug-2.0.0-asl.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/juli-6.0.29.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/livetribe-jsr223-2.0.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mail-1.4.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/msv-core-2011.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mvel2-2.1.3.Final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mx4j-impl-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mx4j-jmx-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mx4j-remote-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/mx4j-tools-2.1.1-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/neethi-3.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/ognl-2.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/opensaml-2.5.1-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/openws-1.4.2-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/oro-2.0.8-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/quartz-1.8.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/relaxngDatatype-20020414.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/rome-0.9.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/saaj-api-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/saaj-impl-1.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/saxon-8.9.0.4-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/saxon-dom-8.9.0.4-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/saxon-xqj-8.9.0.4.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/servlet-api-2.5-20081211.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/smack-3.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/smackx-3.1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-aop-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-beans-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-context-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-context-support-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-core-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-expression-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-jdbc-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-jms-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-security-config-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-security-core-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-security-crypto-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-security-web-3.1.0.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-tx-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/spring-web-3.2.1.RELEASE.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/stax-api-1.0-2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/stax-utils-20080702-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/stax2-api-3.0.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/staxon-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/sxc-core-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/sxc-runtime-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/sxc-xpath-0.7.3-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/tomcat-apr-5.5.23.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/tomcat-util-5.5.23.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/woodstox-core-asl-4.0.8.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/wsdl4j-1.6.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/wss4j-1.6.3.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xapool-1.5.0-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xml-resolver-1.2-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xmlpull-1.1.3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xmlschema-core-2.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xmlsec-1.4.0-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xmltooling-1.3.2-1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xpp3-1.1.3.4.O.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xpp3_min-1.1.3.4.O-osgi.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xsdlib-2010.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/opt/xstream-1.4.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/jruby-complete-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/jruby-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/js-1.6R5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/js-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/junit-4.9.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/jython-2.2.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/jython-engine-1.1-jdk14.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/mule-tests-functional-3.4.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.mule.tooling.server.3.4.0_3.4.0.201310241917/mule/user/xmlunit-1.1.jar"/>
+    </path>
+    <path id="octopusconsortium.classpath">
+        <pathelement location="libs/Qxlva/joda-time-2.0.jar"/>
+        <path refid="Mule Runtime [Mule Server 3.4.0 CE].libraryclasspath"/>
+        <pathelement location="bin"/>
+        <pathelement location="libs/commons-beanutils-1.8.3.jar"/>
+        <pathelement location="libs/sqljdbc4.jar"/>
+        <pathelement location="libs/Mockito/separate-jars/com.springsource.org.objenesis-1.0.0.jar"/>
+        <pathelement location="libs/Mockito/separate-jars/mockito-core-1.9.5.jar"/>
+        <pathelement location="libs/wiremock/commons-cli-1.2.jar"/>
+        <pathelement location="libs/wiremock/httpcore-4.3.jar"/>
+        <pathelement location="libs/wiremock/httpcore-ab-4.3.jar"/>
+        <pathelement location="libs/wiremock/httpcore-nio-4.3.jar"/>
+        <pathelement location="libs/wiremock/wiremock-1.36.jar"/>
+        <pathelement location="libs/wiremock/httpclient-4.3.1.jar"/>
+        <pathelement location="libs/wiremock/jackson-databind-2.2.3.jar"/>
+        <pathelement location="libs/wiremock/jackson-core-2.2.3.jar"/>
+        <pathelement location="libs/wiremock/guava-15.0.jar"/>
+        <pathelement location="libs/wiremock/jackson-annotations-2.2.3.jar"/>
+        <pathelement location="libs/Qxlva/webservice_common-1.1.7.jar"/>
+        <pathelement location="libs/Qxlva/smsp_webcommon-1.1.7.jar"/>
+        <pathelement location="libs/Qxlva/assist-time-1.0.9-SNAPSHOT.jar"/>
+        <pathelement location="libs/Qxlva/smsp_webclient-1.1.7.jar"/>
+        <pathelement location="libs/mockrunner-core-0.4.5.jar"/>
+        <pathelement location="libs/mockrunner-jdbc-0.4.5.jar"/>
+        <pathelement location="libs/Qxlva/generic_webservice_objects-1.1.7.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/app">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/test/java">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/main/resources">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src/test/resources">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src/main/java"/>
+            <src path="src/main/app"/>
+            <src path="src/test/java"/>
+            <src path="src/main/resources"/>
+            <src path="src/test/resources"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="AllTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.AllTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="AllUnitTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.AllUnitTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="AuthorisationFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.AuthorisationFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="BankHolidayCacheTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.BankHolidayCacheTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="CheckLondonPostcodesTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.DoS.CheckLondonPostcodesTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="DosFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.DosFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="EncounterResponseToDosCheckCapacitySummaryTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.DoS.EncounterResponseToDosCheckCapacitySummaryTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests.IsBankHoliday_WithChristmasInEngland_ReturnsTrue">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests.IsBankHoliday_WithNonBankHoliday_ReturnsFalse">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="IsBankHolidayFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.IsBankHolidayFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="ITKDigitalSignatureTransformerFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.ITKDigitalSignatureTransformerFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="LocateServicesFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.LocateServicesFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OOHITKFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.OOHITKFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OOHLondonPostcodeCacheTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.OOHLondonPostcodeCacheTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OrqestraMessageTransformerFunctionalTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.OrqestraMessageTransformerFunctionalTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="OrqestraMessageTransformerTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.Qxlva.OrqestraMessageTransformerTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SqlBatchExecutorTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.SqlBatchExecutorTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueDobValidationInterceptorTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.SubmitToCallQueueDobValidationInterceptorTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest.doTransform_WithoutProvider_ReturnsDefaultAuthor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest.doTransform_WithProvider_ReturnsCorrectAuthor">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueEnquiryToCDA_UKTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.Transformers.ITK.SubmitToCallQueueEnquiryToCDA_UKTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="SubmitToCallQueueFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.SubmitToCallQueueFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="VerifyPatientFunctionalTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.VerifyPatientFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="VerifyPatientFunctionalTest.verifyPatient_WithPatientDetails_SendsSignedMessageToPDS">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.VerifyPatientFunctionalTest" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="WSSecurityTransformerTests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="OctopusConsortium.Core.WSSecurityTransformerTests" todir="${junit.output.dir}"/>
+            <classpath refid="octopusconsortium.classpath"/>
+        </junit>
+    </target>
+    <target name="XMLGregorianCalendarConversionUtil">
+        <java classname="OctopusConsortium.Core.XMLGregorianCalendarConversionUtil" failonerror="true" fork="yes">
+            <classpath refid="octopusconsortium.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

@@ -1,0 +1,14 @@
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://nww.pathwaysdos.nhs.uk/app/api/webservices">
+   <env:Body>
+      <ns1:ServiceDetailsByIdResponse>
+         <ns1:ContactDetails>
+            <ns1:ContactDetail>
+               <ns1:tag>itk</ns1:tag>
+               <ns1:name>111 Routing Details</ns1:name>
+               <ns1:value>http://localhost:{port}/GP111\|urn:nhs-itk:interaction:primaryOutofHourRecipientNHS111CDADocument-v2-0\|CDA\|Primary\|</ns1:value>
+               <ns1:order>1</ns1:order>
+            </ns1:ContactDetail>
+       	</ns1:ContactDetails>
+      </ns1:ServiceDetailsByIdResponse>
+   </env:Body>
+</env:Envelope>

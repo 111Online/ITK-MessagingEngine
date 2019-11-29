@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns:s="http://syndication.nhschoices.nhs.uk/services" xmlns="http://www.w3.org/2005/Atom">
+	<title type="text">NHS Choices - Pharmacy services Near Postcode - N1 1EE - Within 50km</title>
+	<id>http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/postcode/n11ee?range=50</id>
+	<rights type="text">© Crown Copyright 2009</rights>
+	<updated>2013-12-10T14:34:32Z</updated>
+	<category term="Search" />
+	<logo>http://www.nhs.uk/nhscwebservices/documents/logo1.jpg</logo>
+	<author>
+		<name>NHS Choices</name>
+		<uri>http://www.nhs.uk</uri>
+		<email>webservices@nhschoices.nhs.uk</email>
+	</author>
+	<link rel="self" type="application/xml" title="NHS Choices - Pharmacy services Near Postcode - N1 1EE - Within 50km" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/postcode/N11EE?apikey=NAYAAIKT&amp;range=50" />
+	<link rel="first" type="application/xml" title="first" length="1000" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/postcode/N11EE?apikey=NAYAAIKT&amp;range=50&amp;page=1" />
+	<link rel="next" type="application/xml" title="next" length="1000" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/postcode/N11EE?apikey=NAYAAIKT&amp;range=50&amp;page=2" />
+	<link rel="last" type="application/xml" title="last" length="1000" href="http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/postcode/N11EE?apikey=NAYAAIKT&amp;range=50&amp;page=182" />
+	<link rel="alternate" title="NHS Choices - Find and choose services - Pharmacy services" href="http://www.nhs.uk/Service-Search/" />
+	<tracking xmlns="http://syndication.nhschoices.nhs.uk/services">&lt;img style="border: 0; width: 1px; height: 1px;" alt="" src="http://statse.webtrendslive.com/dcss9yzisf9xjyg74mgbihg8p_8d2u/njs.gif?dcsuri=/services%2ftypes%2fsrv0158%2fpostcode%2fN11EE&amp;amp;wt.js=no&amp;amp;wt.cg_n=syndication"/&gt;</tracking>
+	<s:SearchCoords />
+	<entry>
+		<id>http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/co49333</id>
+		<title type="text"/>
+		<updated>2013-12-10T14:34:32Z</updated>
+		<link rel="self" title="Clockwork Pharmacy" href="http://localhost:{port}/services/types/srv0158/co49333?apikey=NAYAAIKT" />
+		<link rel="alternate" title="Clockwork Pharmacy" href="http://www.nhs.uk/Services/pharmacies/PctServices/DefaultView.aspx?id=3903" />
+		<content type="application/xml">
+			<s:servicesummary>
+				<s:type code="srv0158">Pharmacy services</s:type>
+				<s:serviceDeliverer>
+					<s:name>Clockwork Pharmacy</s:name>
+				</s:serviceDeliverer>
+				<s:distance>0.1</s:distance>
+			</s:servicesummary>
+		</content>
+	</entry>
+	<entry>
+		<id>http://v1.syndication.nhschoices.nhs.uk/services/types/srv0158/co49332</id>
+		<title type="text"/>
+		<updated>2013-12-10T14:34:32Z</updated>
+		<link rel="self" title="P Edward Ltd" href="http://localhost:{port}/services/types/srv0158/co49332?apikey=NAYAAIKT" />
+		<link rel="alternate" title="P Edward Ltd" href="http://www.nhs.uk/Services/pharmacies/PctServices/DefaultView.aspx?id=3839" />
+		<content type="application/xml">
+			<s:servicesummary>
+				<s:type code="srv0158">Pharmacy services</s:type>
+				<s:serviceDeliverer>
+					<s:name>P Edward Ltd</s:name>
+				</s:serviceDeliverer>
+				<s:distance>0.14142135623731</s:distance>
+			</s:servicesummary>
+		</content>
+	</entry>
+</feed>

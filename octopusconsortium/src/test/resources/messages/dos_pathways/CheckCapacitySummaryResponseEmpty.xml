@@ -1,0 +1,8 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="https://nww.pathwaysdos.nhs.uk/app/api/webservices">
+   <SOAP-ENV:Body>
+      <ns1:CheckCapacitySummaryResponse>
+         <ns1:CheckCapacitySummaryResult>            
+         </ns1:CheckCapacitySummaryResult>
+      </ns1:CheckCapacitySummaryResponse>
+   </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

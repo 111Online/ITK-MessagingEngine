@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ssl="http://www.mulesoft.org/schema/mule/ssl" xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+    <http:request-config name="HTTP_Request_Configuration_PDS" host="${services.pds.endpoint.host}" port="${services.pds.endpoint.port}" basePath="${services.pds.endpoint.path}" doc:name="HTTP Request Configuration"/>
+    
+    <sub-flow name="QuerySpine_MatchPatient" >
+        <set-variable variableName="pdsstarttime" value="#[System.currentTimeMillis()]" doc:name="PDS Timer"/>
+        <flow-ref name="QuerySpine_GetPatientDetails_RequestAndResponse" doc:name="GetPatientDetails"/>
+        <logger message="querySpineElapsed = #[System.currentTimeMillis() - flowVars['pdsstarttime']]ms. - messageid = #[message.id]
+" level="DEBUG" doc:name="Logger" category="GetPatientDetails"/>
+        <remove-variable variableName="pdsstarttime" doc:name="Remove Timer"/>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.GetPatientResponseV1ToIdentifyPatientResponse" doc:name="Response To IdentifyPatientResponse"/>
+        <choice doc:name="Patient Matched">
+            <when expression="#[payload.getPatient()!=null]">
+                <processor-chain doc:name="Processor Chain">
+                    <enricher source="#[header:outbound:RepeatCallerStatus]" target="#[variable:RepeatCallerStatus]" doc:name="Message Enricher">
+                        <flow-ref name="Submit_Query_To_Repeat_Caller_Service" doc:name="Query RC"/>
+                    </enricher>
+                    <scripting:transformer doc:name="Set Payload RC status">
+                        <scripting:script engine="Groovy">
+                            <scripting:text><![CDATA[payload.setRepeatCallerStatus(message.getInvocationProperty('RepeatCallerStatus'));
+payload]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+                        </scripting:script>
+                    </scripting:transformer>
+                    <logger message="RepeatCallerStatus = #[variable:RepeatCallerStatus]  payload = #[payload]" level="DEBUG" doc:name="Logger" category="GetPatientDetails"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <scripting:transformer doc:name="Set Payload RC status INSUFFICIENT_INFORMATION">
+                        <scripting:script engine="Groovy">
+                            <scripting:text><![CDATA[payload.setRepeatCallerStatus(OctopusConsortium.Service.Models.RepeatCallerStatus.INSUFFICIENT_INFORMATION);
+                                                                                                                                                                                                                                                                                        payload;]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+                        </scripting:script>
+                    </scripting:transformer>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </sub-flow>
+    <flow name="QuerySpine_GetPatientDetails_RequestAndResponse" >
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.PatientDetailsToGetPatientDetailsRequestV1" doc:name="Create GetPatientDetails">
+        	<spring:property name="orgName" value="${info.org.name}"/>
+            <spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.GetPatientDetailsV1ToDistributionEnvelopeV2" doc:name="Create ITK distribution Envelope">
+            <spring:property name="orgName" value="${info.org.name}"/>
+            <spring:property name="ods" value="${info.org.ods}"/>
+        </custom-transformer>
+
+        <flow-ref name="QuerySpine_ServiceCall_No_CXF" doc:name="PDS Request"/>
+        <flow-ref name="QuerySpine_ProcessResponse" doc:name="Process PDS Response"/>
+        <set-variable variableName="isMatch" value="#[(payload == null || payload instanceof org.mule.transport.NullPayload || ((OctopusConsortium.Models.PDS.COMTMT000016GB01GetPatientDetailsResponseV10)payload).getSubject() == null || ((OctopusConsortium.Models.PDS.COMTMT000016GB01GetPatientDetailsResponseV10)payload).getSubject().getValue() == null) ? false : true]" doc:name="Determine if patient was matched"/>
+        <logger message="PDSQueryDate = #[server.dateTime] PDSQueryMatch = #[isMatch]" level="INFO" doc:name="PDS Audit log"/>
+        <set-session-variable variableName="Track" value="Track QuerySpineFlowProcessResponse" doc:name="Track"/>
+
+    </flow>
+    <sub-flow name="QuerySpine_ProcessResponse" >
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.DistributionEnvelopeV2ToGetPatientDetailsResponseV1" doc:name="To GetPatientDetailsResponseV1"/>
+
+        <choice doc:name="Number of patients">
+            <when expression="payload.size() == 0">
+                <processor-chain doc:name="No Payload">
+                    <logger message="No getPatientDetailsResponseItems returned, setting payload to null" level="INFO" category="GetPatientDetails_ProcessResponse" doc:name="No getPatientDetailsResponseItems returned"/>
+                    <set-payload value="#[null]" doc:name="Set Payload null"/>
+
+                </processor-chain>
+            </when>
+            <when expression="payload.get(0).getValue().getCode() == &quot;DEMOG-0007&quot;">
+                <processor-chain doc:name="Partial Match (DEMOG-0007)">
+                    <logger message="Multiple matches were found for the patient #[payload.get(0).getValue().getCode()]" level="INFO" category="GetPatientDetails_ProcessResponse" doc:name="Multiple matches found"/>
+                    <set-payload value="#[payload.get(0)]" doc:name="Set Payload null"/>
+                </processor-chain>
+            </when>
+            <when expression="payload.get(0).getValue().getCode() == &quot;DEMOG-0001&quot;">
+                <processor-chain doc:name="No Match (DEMOG-0001)">
+                    <logger message="Patient was not matched #[payload.get(0).getValue().getCode()]" level="INFO" category="GetPatientDetails_ProcessResponse" doc:name="No match found"/>
+                    <set-payload value="#[payload.get(0)]" doc:name="Set payload"/>
+                </processor-chain>
+            </when>
+            <when expression="payload.get(0).getValue().getCode() == &quot;SMSP-0000&quot;">
+                <processor-chain doc:name="Successful Match (SMSP-0000)">
+                    <logger message="Patient was matched #[payload.get(0).getValue().getCode()]" level="INFO" category="GetPatientDetails_ProcessResponse" doc:name="Match Success"/>
+                    <set-payload value="#[payload.get(0)]" doc:name="Set payload"/>
+                </processor-chain>
+            </when>
+
+            <otherwise>
+                <processor-chain doc:name="Processor Chain">
+                    <logger message="Matching error  with code = #[payload.get(0).getValue().getCode()]" level="INFO" category="GetPatientDetails_ProcessResponse" doc:name="Matching Error"/>
+                    <set-payload value="#[payload.get(0)]" doc:name="Set Payload"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
+    </sub-flow>
+
+    <sub-flow name="QuerySpine_ServiceCall_No_CXF" >
+        <set-variable variableName="PDSTrackingId" value="#[payload.getHeader().getTrackingid()]" doc:name="Save Tracking Id"/>
+
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.DistributionEnvelopeV2ToXml" doc:name="DistributionEnvelope To Xml"/>
+        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="xsl/pds_soap.xsl" doc:name="XSLT Set Body">
+            <mulexml:context-property key="toVirtualUri" value="${services.pds.endpoint.protocol}://${services.pds.endpoint.host}:${services.pds.endpoint.port}/${services.pds.endpoint.path}"/>
+            <mulexml:context-property key="messageID" value="#[UUID.randomUUID().toString().toUpperCase()]"/>
+        </mulexml:xslt-transformer>
+        <byte-array-to-string-transformer  doc:name="Byte Array to String"/>
+
+        
+        <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.ITKDigitalSignatureTransformer" doc:name="Add Security into SOAP Header">
+            <spring:property name="username" value="${services.pds.endpoint.username}"/>
+        </custom-transformer>
+        
+        <string-to-byte-array-transformer doc:name="String to Byte Array"/>
+        <choice doc:name="Check Message Size">
+            <when expression="payload.size() &gt; ${application.pds.maximumsize}  ">
+            	<processor-chain doc:name="Processor Chain - Over Limit">
+	                <logger message="Message size #[payload.size()]B exceeds limit ${application.pds.maximumsize}B" level="INFO" category="PDSMessageSize" doc:name="Message size exceeds limit"/>
+                    <set-payload value="#[&quot;Blanked Payload&quot;]" doc:name="Blank Payload"/>
+	                <scripting:component doc:name="Throw exception">
+	                    <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.MessageSizeLimitException();
+	]]></scripting:script>
+	                </scripting:component>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain doc:name="Processor Chain - Within Limit">
+	                <logger message="Message size #[payload.size()]B within limit ${application.pds.maximumsize}B" level="INFO" category="PDSMessageSize" doc:name="Message size within limit"/>
+	                <message-properties-transformer doc:name="Set SOAP Action &amp; Content Type">
+	                    <add-message-property key="SOAPAction" value="urn:nhs-itk:services:201005:getPatientDetails-v1-0"/>
+	                    <add-message-property key="Content-Type" value="text/xml"/>
+	                </message-properties-transformer>
+	                <flow-ref name="message_logging_PDS_GetPatientDetailsRequest" doc:name="Log Request"/>
+	                <choice doc:name="HTTP or HTTPS">
+	                    <when expression="'${services.pds.endpoint.protocol}' == 'http'">
+	                        <processor-chain doc:name="Processor Chain">
+	                            <http:request config-ref="HTTP_Request_Configuration_PDS" path="${services.pds.endpoint.path}" method="POST" doc:name="HTTP PDS No CXF"/>
+	                        </processor-chain>
+	                    </when>
+	                    <otherwise>
+	                        <processor-chain doc:name="Processor Chain">
+	                            <https:outbound-endpoint exchange-pattern="request-response" host="${services.pds.endpoint.host}" port="${services.pds.endpoint.port}" path="${services.pds.endpoint.path}" method="POST" connector-ref="HTTP_HTTPS-PDS-Old-Test" responseTimeout="30000" contentType="text/xml" doc:name="HTTPS From Config (Deprecated)"/>
+	                        </processor-chain>
+	                    </otherwise>
+	                </choice>
+	                <flow-ref name="message_logging_PDS_GetPatientDetailsResponse" doc:name="Log Response"/>
+                    <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+                    <mulexml:xslt-transformer xsl-file="xsl/pds_soap_extract.xsl" maxIdleTransformers="2" maxActiveTransformers="5" doc:name="XSLT Extract Body"/>
+                    <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+                    <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.XmlToDistributionEnvelopeV2" doc:name="Xml To DistributionEnvelope"/>
+
+                </processor-chain>
+            </otherwise>
+        </choice>
+
+    </sub-flow>
+    <sub-flow name="queryspine_newconnector">
+        <http:request config-ref="HTTPS_Request_Configuration_PDS" path="${services.pds.endpoint.path}" method="POST" sendBodyMode="ALWAYS" doc:name="HTTPS PDS No CXF"/>
+    </sub-flow>
+    <flow name="QuerySpine_HydrateCDAWithPDSData">
+        <logger message="starting callQueuePds. messageid = #[message.id]" level="TRACE" category="callQueuePds" doc:name="start"/>
+        <choice doc:name="Perform lookup">
+            <when expression="payload.getPatientDetails().getNhsNumber() == null &amp;&amp; '${services.pds.endpoint.host}' != null &amp;&amp; '${services.pds.endpoint.host}' != ''">
+                <logger message="Performing PDS lookup. messageid = #[message.id]" level="DEBUG" category="callQueuePds" doc:name="lookup being performed"/>
+                <set-variable variableName="originalPayload" value="#[payload]" doc:name="Store payload"/>
+                <scripting:transformer doc:name="set IdentifyPatientRequest">
+                    <scripting:script engine="Groovy"><![CDATA[import OctopusConsortium.Service.Models.*;
+
+IdentifyPatientRequest ipr = new IdentifyPatientRequest();
+
+ipr.setForename(payload.getPatientDetails().getForename());
+ipr.setSurname(payload.getPatientDetails().getSurname());
+ipr.setGender(payload.getPatientDetails().getGender());
+ipr.setDateOfBirth(payload.getPatientDetails().getDateOfBirth().getDob());
+if(payload.getPatientDetails().getHomeAddress()!=null){
+	ipr.setAddress(payload.getPatientDetails().getHomeAddress().getStreetAddressLine1());
+	ipr.setPostcode(payload.getPatientDetails().getHomeAddress().getPostalCode());
+}
+return ipr;]]></scripting:script>
+                </scripting:transformer>
+                <flow-ref name="QuerySpine_GetPatientDetails_RequestAndResponse" doc:name="GetPatientDetails"/>
+                <scripting:component doc:name="check for null payload and throw exception if missing">
+                    <scripting:script engine="Groovy"><![CDATA[if(payload == null || payload instanceof org.mule.transport.NullPayload){
+	println("Patient details failure");
+	throw new java.lang.NullPointerException("Patient details failure");
+}
+return payload]]></scripting:script>
+                </scripting:component>
+                <custom-transformer class="OctopusConsortium.Core.Transformers.PDS.GetPatientResponseV1ToIdentifyPatientResponse" doc:name="ToIdentifyPatientResponse" doc:description="we dont need to use the repeat caller part of this object but the trasformer already exists to populate it so we will use it "/>
+                <scripting:component doc:name="populate patient details in payload">
+                    <scripting:script engine="Groovy"><![CDATA[
+def identifyPatientResponse = payload;
+def originalPayload = message.getInvocationProperty('originalPayload');
+
+if(identifyPatientResponse.getOverallStatus() == OctopusConsortium.Service.Models.IdentifyPatientResponseOverallStatus.PATIENT_IDENTIFIED){
+
+	if (identifyPatientResponse.getPatient() != null){
+		if (identifyPatientResponse.getPatient().getGPPractice() != null){
+			println("set GP Practice");
+			originalPayload.getPatientDetails().setGpPractice(identifyPatientResponse.getPatient().getGPPractice());
+		}
+		if (identifyPatientResponse.getPatient().getNhsNumber()){
+			println("set NHS Number");
+			originalPayload.getPatientDetails().setNhsNumber(identifyPatientResponse.getPatient().getNhsNumber());
+		}
+	}
+	
+	if (originalPayload.getPatientDetails().getHomeAddress().getStreetAddressLine1() == null 
+	|| originalPayload.getPatientDetails().getHomeAddress().getStreetAddressLine1() == "") {
+		originalPayload.getPatientDetails().setHomeAddress(identifyPatientResponse.getPatient().getAddress());
+	}
+	
+	//originalPayload.getPatientDetails().setForename(identifyPatientResponse.getPatient().getForename());
+	//originalPayload.getPatientDetails().setSurname(identifyPatientResponse.getPatient().getSurname());
+	//originalPayload.getPatientDetails().setDateOfBirth(identifyPatientResponse.getPatient().getDOB());
+	//originalPayload.getPatientDetails().setGender(identifyPatientResponse.getPatient().getGender());
+}
+payload = originalPayload
+return payload;]]></scripting:script>
+                </scripting:component>
+                <remove-variable variableName="originalPayload" doc:name="Remove stored payload"/>
+            </when>
+            <otherwise>
+                <logger message="PDS lookup not performed. messageid = #[message.id]" level="DEBUG" category="callQueuePds" doc:name="lookup not performed"/>
+            </otherwise>
+        </choice>
+        <choice-exception-strategy doc:name="Choice Exception Strategy">
+            <catch-exception-strategy when="#[exception.causedBy(OctopusConsortium.Core.InvalidMessageException)==false]" doc:name="Catch Exception Strategy">
+                <set-payload value="#[originalPayload]" doc:name="Set Payload back to original payload before failed PDS lookup"/>
+
+            </catch-exception-strategy>
+        </choice-exception-strategy>
+    </flow>
+
+</mule>

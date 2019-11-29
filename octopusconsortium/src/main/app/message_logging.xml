@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+<sub-flow name="message_logging_LogMessage" >
+        <scripting:transformer doc:name="Log message to db">
+            <scripting:script engine="Groovy"><![CDATA[org.mule.transport.jdbc.JdbcConnector jdbcConnector = (org.mule.transport.jdbc.JdbcConnector) muleContext.getRegistry().lookupConnector("JDBC");
+javax.sql.DataSource datasource = (javax.sql.DataSource) jdbcConnector.getDataSource();
+java.sql.Connection connection;
+
+try {
+ String url = message.getInvocationProperty('MessageUrl');
+ String messageType = message.getInvocationProperty('messageType');
+ String messageRecipient = message.getOutboundProperty('RecipientEndpointUrl');
+ String overriddenMessageRecipient = message.getInvocationProperty('MessageRecipient');
+ 
+ if (overriddenMessageRecipient != null && overriddenMessageRecipient != '') {
+	 messageRecipient = overriddenMessageRecipient;
+ }
+  
+ if (message.getInvocationProperty('IncludeRecipientEndpointUrl') == 'false'){
+ 	messageRecipient = '';
+ }
+ 
+ String ITKJourneyId = message.getSessionProperty('ITKJourneyId');
+ String timestamp = java.time.Instant.now();
+ 
+ connection = (java.sql.Connection) datasource.getConnection();
+
+ //SQL injection solution taken from here: https://www.owasp.org/index.php/Preventing_SQL_Injection_in_Java
+
+ String insertquery = "EXEC AddMessage ?, ?, ?, ?, ?, ?, ?";
+
+ java.sql.PreparedStatement stmt = connection.prepareStatement(insertquery);
+
+ stmt.setNString(1, message.payload);
+ stmt.setString(2, messageType);
+ stmt.setString(3, url);
+ stmt.setString(4, message.id.toString());
+ stmt.setString(5, timestamp.toString());
+ stmt.setString(6, messageRecipient);
+ stmt.setString(7, ITKJourneyId);
+ 
+ stmt.executeQuery();
+ 
+ connection.close();
+ return message.payload;
+} catch (java.sql.SQLException e) {
+	throw e;
+}]]></scripting:script>
+        </scripting:transformer>
+    </sub-flow>
+    <sub-flow name="message_logging_PDS_GetPatientDetailsRequest"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['GetPatientDetails_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.pds.endpoint.protocol}://${services.pds.endpoint.host}:${services.pds.endpoint.port}/${services.pds.endpoint.path}" doc:name="Create MessageUrl for PDS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_PDS_GetPatientDetailsResponse"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['GetPatientDetails_Response']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.pds.endpoint.protocol}://${services.pds.endpoint.host}:${services.pds.endpoint.port}/${services.pds.endpoint.path}" doc:name="Create MessageUrl for PDS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_ServiceDetailsByIdRequest_Proxy"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['ServiceDetailsById_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="https://${services.dos.proxy.endpoint.host}${services.dos.proxy.endpoint.path.getservicedetailsbyid}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_ServiceDetailsByIdResponse_Proxy"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['ServiceDetailsById_Response']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="https://${services.dos.proxy.endpoint.host}${services.dos.proxy.endpoint.path.getservicedetailsbyid}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_ServiceDetailsByIdRequest"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['ServiceDetailsById_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.dos.endpoint.protocol}://${services.dos.endpoint.host}:${services.dos.endpoint.port}/${services.dos.endpoint.path}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_ServiceDetailsByIdResponse"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['ServiceDetailsById_Response']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.dos.endpoint.protocol}://${services.dos.endpoint.host}:${services.dos.endpoint.port}/${services.dos.endpoint.path}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+	<sub-flow name="message_logging_CheckCapacitySummaryRequest"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['CheckCapacitySummary_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.dos.endpoint.protocol}://${services.dos.endpoint.host}:${services.dos.endpoint.port}/${services.dos.endpoint.path}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+	<sub-flow name="message_logging_CheckCapacitySummaryResponse"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['CheckCapacitySummary_Response']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.dos.endpoint.protocol}://${services.dos.endpoint.host}:${services.dos.endpoint.port}/${services.dos.endpoint.path}" doc:name="Create MessageUrl for DoS"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_SendNHS111Request"  >
+        <async doc:name="Async">
+
+            <set-variable variableName="messageType" value="#['SendNHS111_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="#[message.outboundProperties.EndpointProtocol + '://'  + message.outboundProperties.EndpointHost + ':' + message.outboundProperties.EndpointPort + '/' + message.outboundProperties.EndpointPath]" doc:name="Create MessageUrl for 111"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="LogMessage"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_SendNHS111Request_email">
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['SendNHS111_Request']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="https://${services.email.host}:443/${services.email.endpoint}" doc:name="Create MessageUrl for 111"/>
+            <set-variable variableName="MessageRecipient" value="#[sessionVars.ITKRecipientUrl]" doc:name="Create MessageRecipient for email"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="LogMessage"/>
+            <remove-variable variableName="MessageRecipient" doc:name="Remove MessageRecipient"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_SendNHS111Response"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['SendNHS111_Response']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="#['n/a']" doc:name="Create MessageUrl for 111"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_GetFullPathwaysJourneyRequest"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['GetFullPathwaysJourneyRequest']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.pathways.endpoint.protocol}://${services.pathways.endpoint.host}:${services.pathways.endpoint.port}${services.pathways.endpoint.path}" doc:name="Create MessageUrl for FullPathwaysJourney"/>
+            <set-variable variableName="IncludeRecipientEndpointUrl" value="false" doc:name="Ensure Recipient is not logged incorrectly"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+            <remove-variable variableName="IncludeRecipientEndpointUrl" doc:name="Remove IncludeRecipientEndpointUrl"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_GetFullPathwaysJourneyResponse"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['GetFullPathwaysJourneyResponse']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="${services.pathways.endpoint.protocol}://${services.pathways.endpoint.host}:${services.pathways.endpoint.port}${services.pathways.endpoint.path}" doc:name="Create MessageUrl for FullPathwaysJourney"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+    <sub-flow name="message_logging_Error"  >
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <async doc:name="Async">
+            <set-variable variableName="messageType" value="#['Error']" doc:name="MessageType"/>
+            <set-variable variableName="MessageUrl" value="#['n/a']" doc:name="Create MessageUrl for 111"/>
+            <flow-ref name="message_logging_LogMessage" doc:name="Log Message"/>
+            <remove-variable variableName="MessageUrl" doc:name="Remove MessageUrl"/>
+            <remove-variable variableName="messageType" doc:name="Remove MessageType"/>
+        </async>
+    </sub-flow>
+</mule>

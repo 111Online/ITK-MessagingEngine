@@ -1,0 +1,11 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:a="http://www.w3.org/2005/08/addressing">
+   <s:Header>
+      <ActivityId CorrelationId="812205c9-f249-4d54-8062-e58948c46f35" xmlns="http://schemas.microsoft.com/2004/09/ServiceModel/Diagnostics">ee13e09d-9bb6-4599-8f37-0533e557610a</ActivityId>
+      <a:RelatesTo>urn:uuid:19f4b7f0-fb80-11e2-bc6b-8f1dcea903c1</a:RelatesTo>
+      <a:MessageID>897925C2-94DC-4B30-AC33-77F83F219C5F</a:MessageID>
+      <a:Action s:mustUnderstand="1">urn:nhs-itk:services:201005:SendNHS111Report-v2-0Response</a:Action>
+   </s:Header>
+   <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <SimpleMessageResponse xmlns="urn:nhs-itk:ns:201005">testReference</SimpleMessageResponse>
+   </s:Body>
+</s:Envelope>

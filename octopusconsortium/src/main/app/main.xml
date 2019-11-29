@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:jdbc="http://www.mulesoft.org/schema/mule/jdbc"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp" 
+xmlns:https="http://www.mulesoft.org/schema/mule/https" 
+xmlns="http://www.mulesoft.org/schema/mule/core" 
+xmlns:vm="http://www.mulesoft.org/schema/mule/vm" 
+xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" 
+xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" 
+xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" 
+xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+xmlns:spring="http://www.springframework.org/schema/beans" 
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:core="http://www.mulesoft.org/schema/mule/core" 
+xmlns:jms="http://www.mulesoft.org/schema/mule/jms" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:ss="http://www.springframework.org/schema/security" 
+xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
+ xsi:schemaLocation="http://www.mulesoft.org/schema/mule/jdbc http://www.mulesoft.org/schema/mule/jdbc/current/mule-jdbc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/schema/mule/spring-security/3.1/mule-spring-security.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+    <context:property-placeholder location="classpath:config.properties"></context:property-placeholder>
+    <mule-ss:security-manager doc:name="Spring Security Provider" name="sec-man"> 
+        <mule-ss:delegate-security-provider name="memory-provider" delegate-ref="mainAuthenticationManager"></mule-ss:delegate-security-provider>  
+    </mule-ss:security-manager>
+    <configuration doc:name="Configuration"> 
+        <default-threading-profile maxThreadsActive="80"></default-threading-profile>  
+    </configuration>
+    <https:endpoint exchange-pattern="request-response" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" path="${services.dos.endpoint.path}" name="HTTP_Pathways" connector-ref="HTTP_HTTPS_Pathways" doc:name="HTTP"></https:endpoint>
+        <https:connector name="HTTP_HTTPS_Pathways" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="30000" serverSoTimeout="30000" socketSoLinger="0" doc:name="HTTP\HTTPS"> 
+        <https:tls-server path="cacerts.jks" storePassword="changeit"></https:tls-server>  
+    </https:connector>
+    <https:connector name="HTTP_HTTPS" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="60000" serverSoTimeout="60000" socketSoLinger="0" doc:name="HTTP\HTTPS"> 
+        <https:tls-client path="${application.gp111.keystorefile}" storePassword="${application.gp111.keystorepassword}"></https:tls-client>  
+        <https:tls-key-store path="${application.gp111.keystorefile}" keyPassword="${application.gp111.keypassword}" storePassword="${application.gp111.keystorepassword}"></https:tls-key-store>  
+        <https:tls-server path="${application.gp111.truststorefile}" storePassword="${application.gp111.truststorepassword}"></https:tls-server>  
+    </https:connector>
+    <https:connector name="HTTP_HTTPS-PDS" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="10000" serverSoTimeout="10000" socketSoLinger="0" doc:name="HTTP\HTTPS"> 
+        <https:tls-client path="pds-opentest.jks" storePassword="pds"></https:tls-client>  
+        <https:tls-key-store path="pds-opentest.jks" keyPassword="pds" storePassword="pds"></https:tls-key-store>  
+        <https:tls-server path="pds-opentest.jks" storePassword="pds"></https:tls-server>  
+    </https:connector>
+    <https:connector name="HTTP_HTTPS-PDS-Old-Test" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="10000" serverSoTimeout="10000" socketSoLinger="0" doc:name="HTTP\HTTPS"> 
+        <https:tls-client path="${services.pds.endpoint.keystorefile}" storePassword="${services.pds.endpoint.keystorepassword}"></https:tls-client>  
+        <https:tls-key-store path="${services.pds.endpoint.keystorefile}" keyPassword="${services.pds.endpoint.keypassword}" storePassword="${services.pds.endpoint.keystorepassword}"></https:tls-key-store>  
+        <https:tls-server path="${services.pds.endpoint.truststorefile}" storePassword="${services.pds.endpoint.truststorepassword}"></https:tls-server>  
+    </https:connector>
+    <cxf:configuration name="CXF_ConfigurationWsAddressing" enableMuleSoapHeaders="false" initializeStaticBusInstance="false" doc:name="CXF Configuration" configurationLocation="cxfConfig.xml" doc:description="used to enable WS Addressing"></cxf:configuration>
+    <cxf:configuration name="CXF_ConfigurationService" enableMuleSoapHeaders="false" initializeStaticBusInstance="false" doc:name="CXF Configuration"></cxf:configuration>
+    <jdbc:mssql-data-source name="MS_SQL_Data_Source_Store" user="${application.db.username}" password="${application.db.password}" url="${application.db.url}" transactionIsolation="UNSPECIFIED" doc:name="MS SQL Data Source"></jdbc:mssql-data-source>
+    <jdbc:connector name="JDBC" dataSource-ref="MS_SQL_Data_Source_Store" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="JDBC"></jdbc:connector>
+    <spring:beans> 
+        <spring:bean id="outfaultIdBean" name="outfault" class="OctopusConsortium.Core.CustomSoapFaultOutInterceptor"> 
+            <spring:property name="error" value="error"></spring:property>  
+        </spring:bean>  
+        <spring:bean id="BeanLoggingInInterceptor" name="BeanLoggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"></spring:bean>  
+        <spring:bean id="BeanLoggingOutInterceptor" name="BeanLoggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"></spring:bean>  
+        <spring:bean id="BeanSubmitToCallQueueDobValidationInterceptor" name="BeanSubmitToCallQueueDobValidationInterceptor" class="OctopusConsortium.Core.SubmitToCallQueueDobValidationInterceptor"></spring:bean>  
+        <spring:bean id="OOHProviderPostcodeCache" name="OOHProviderPostcodeCache" class="OctopusConsortium.Core.OOHProviderPostcodeCache"> </spring:bean>  
+        <spring:bean id="sqlCache" class="OctopusConsortium.Core.SqlObjectStore" name="beanSqlCache"> 
+            <spring:property name="JdbcConnection" ref="MS_SQL_Data_Source_Store"></spring:property>  
+            <spring:property name="TableName" value="CacheBlob"></spring:property>  
+            <spring:property name="KeyName" value="Key"></spring:property>  
+            <spring:property name="ValueName" value="Value"></spring:property>  
+            <spring:property name="DateTouchedName" value="DateTouched"></spring:property>  
+        </spring:bean>  
+        <ss:authentication-manager alias="mainAuthenticationManager"> 
+            <ss:authentication-provider> 
+                <ss:user-service id="userService"> 
+                    <ss:user name="${application.user.username}" password="${application.user.password}" authorities="ROLE_USER"></ss:user>  
+                </ss:user-service>  
+            </ss:authentication-provider>  
+        </ss:authentication-manager>  
+    </spring:beans>
+    <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="xsl/hascToCdaNarrative.xsl" name="XSLT_HaSC_To_CDA" doc:name="XSLT"></mulexml:xslt-transformer>
+    <http:request-config name="HTTP_Request_Configuration_Proxy_Test" protocol="HTTPS" doc:name="HTTP_Request_Configuration_Proxy_Test"> 
+        <tcp:client-socket-properties connectionTimeout="30000"></tcp:client-socket-properties>  
+        <tls:context enabledProtocols="TLSv1.1, TLSv1.2"> 
+            <tls:trust-store path="111-proxy-test.jks" password="password" type="jks"></tls:trust-store>  
+            <tls:key-store type="jks" path="111-proxy-test.jks" keyPassword="password" password="password"></tls:key-store>  
+        </tls:context>  
+    </http:request-config>
+    <http:request-config name="HTTPS_Request_Configuration_Proxy_Live" protocol="HTTPS" doc:name="HTTP_Request_Configuration_Proxy_Live" responseTimeout="60000" connectionIdleTimeout="60000">
+        <tcp:client-socket-properties connectionTimeout="60000"/>
+        <tls:context enabledProtocols="TLSv1.1, TLSv1.2">
+            <tls:trust-store path="111-proxy-live.jks" password="gMhu6LfRpYz6cfyVeymes3Qwd" type="jks" />
+            <tls:key-store path="111-proxy-live.jks" keyPassword="gMhu6LfRpYz6cfyVeymes3Qwd" password="gMhu6LfRpYz6cfyVeymes3Qwd"  />
+        </tls:context>
+    </http:request-config>
+    <http:request-config name="HTTP_Request_Configuration_HTTP_Test"  doc:name="HTTP_Request_Configuration_HTTP_Test" responseTimeout="60000" connectionIdleTimeout="60000">
+        <tcp:client-socket-properties connectionTimeout="60000"/>
+    </http:request-config>
+    <http:request-config name="HTTP_Request_Configuration_Pathways" protocol="HTTPS" host="${services.dos.endpoint.host}" port="${services.dos.endpoint.port}" basePath="${services.dos.endpoint.path}" doc:name="HTTP Request Configuration">
+        <tcp:client-socket-properties connectionTimeout="30000"/>
+        <tls:context enabledProtocols="TLSv1.1">
+            <tls:trust-store path="cacerts.jks" password="changeit" type="jks"/>
+        </tls:context>
+    </http:request-config>
+    <http:request-config name="HTTPS_Request_Configuration_PDS" protocol="HTTPS" host="${services.pds.endpoint.host}" port="${services.pds.endpoint.port}" basePath="${services.pds.endpoint.path}" doc:name="HTTP Request Configuration">
+        <tls:context>
+            <tls:trust-store path="${services.pds.endpoint.truststorefile}" password="${services.pds.endpoint.truststorepassword}"/>
+            <tls:key-store path="${services.pds.endpoint.keystorefile}" keyPassword="${services.pds.endpoint.keypassword}" password="${services.pds.endpoint.keystorepassword}"/>
+        </tls:context>
+    </http:request-config>
+    <http:listener-config name="HTTPS_Listener_Configuration" protocol="HTTPS" host="${application.endpoint.host}" port="${application.endpoint.port}" doc:name="HTTP Listener Configuration" connectionIdleTimeout="10000">
+        <tls:context>
+            <tls:key-store type="jks" path="${application.endpoint.cert}" keyPassword="${application.endpoint.certkeypass}" password="${application.endpoint.certstorepass}"/>
+        </tls:context>
+    </http:listener-config>
+    <http:listener-config name="HTTP_Listener_Configuration"  host="${application.endpoint.host}" port="80" doc:name="HTTP Listener Configuration" connectionIdleTimeout="10000">
+       
+    </http:listener-config>
+    <http:request-config name="HTTPS_Connection_Check_Configuration" protocol="HTTPS" host="${application.connectioncheck.host}" port="${application.connectioncheck.port}" doc:name="HTTP Request Configuration"/>
+    <choice-exception-strategy name="Choice_Exception_Strategy_IdentifyPatient"> 
+        <catch-exception-strategy when="exception.causedBy(OctopusConsortium.Core.InvalidMessageException)" doc:name="Catch Exception Strategy" enableNotifications="false"> 
+            <logger message="Caught custom exception InvalidMessageException messageid #[message.id]. payload #[payload]" level="ERROR" doc:name="Logger"></logger>  
+            <scripting:transformer doc:name="Groovy"> 
+                <scripting:script engine="Groovy">
+                    <scripting:text><![CDATA[def newpayload = new OctopusConsortium.Service.Models.IdentifyPatientResponse()
+newpayload.getErrors().add("Invalid Message Exception : ")    //newpayload.addError(exception.message);
+newpayload]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+  
+                </scripting:script>  
+            </scripting:transformer>  
+        </catch-exception-strategy>  
+        <catch-exception-strategy when="exception.causedBy(org.mule.api.transformer.TransformerException)" doc:name="Catch Exception Strategy"> 
+            <logger level="ERROR" doc:name="Logger" message="TransformerException - messageid #[message.id]. payload #[payload]"></logger>  
+            <scripting:transformer doc:name="Groovy"> 
+                <scripting:script engine="Groovy">
+                    <scripting:text><![CDATA[def newpayload = new OctopusConsortium.Service.Models.IdentifyPatientResponse()
+newpayload.getErrors().add("Message Transformation Exception : ")
+newpayload.setPatient(new OctopusConsortium.Service.Models.Patient());
+
+newpayload]]></scripting:text>
+
+
+
+
+
+
+
+
+
+
+  
+                </scripting:script>  
+            </scripting:transformer>  
+        </catch-exception-strategy>  
+        <catch-exception-strategy when="exception.causedBy(java.lang.SecurityException)" doc:name="Catch Exception Strategy"> 
+            <logger message="Caught custom exception SecurityException messageid #[message.id]. payload #[payload]" level="ERROR" doc:name="Logger"></logger>  
+            <scripting:transformer doc:name="Groovy"> 
+                <scripting:script engine="Groovy"><![CDATA[def newpayload = new OctopusConsortium.Service.Models.IdentifyPatientResponse()
+newpayload.getErrors().add("Security Exception : ")    //newpayload.addError(exception.message);
+newpayload]]></scripting:script>  
+            </scripting:transformer>  
+        </catch-exception-strategy>  
+    </choice-exception-strategy>
+    <choice-exception-strategy name="Choice_Exception_Strategy_test"> 
+        <catch-exception-strategy doc:name="Catch Exception Strategy" when="exception.causedBy(java.lang.SecurityException)"> 
+            <logger message="Error messageid #[message.id] payload:#[payload] " level="ERROR" category="Test Category" doc:name="Logger"></logger>  
+        </catch-exception-strategy>  
+        <catch-exception-strategy doc:name="Catch Exception Strategy"> 
+            <logger message="Error has been caught !!!" level="INFO" doc:name="Logger"></logger>  
+            <scripting:transformer doc:name="Groovy"> 
+                <scripting:script engine="Groovy"><![CDATA[
+import groovy.util.logging.*
+
+//log.error "unexpected payload: " + payload
+
+Exception ex = new Exception("An error has occured processing the request.");
+throw ex;]]></scripting:script>  
+            </scripting:transformer>  
+        </catch-exception-strategy>  
+    </choice-exception-strategy>
+    <flow name="MainFlowHttpGetPing">
+        <http:listener config-ref="HTTPS_Listener_Configuration" path="${application.endpoint.path}ping/" allowedMethods="GET" doc:name="HTTPS GET Inbound Main"/>
+        <http:request config-ref="HTTPS_Connection_Check_Configuration" path="${application.connectioncheck.path}" method="GET" doc:name="HTTPs - Connectivity Check"/>
+        <set-payload value="#[null]" doc:name="Empty Payload"/>
+        <choice doc:name="HTTP Status Not OK">
+            <when expression="message.inboundProperties['http.status'] != '200'">
+                <message-properties-transformer doc:name="Set 404 Status">
+                    <add-message-property key="http.status" value="404"/>
+                </message-properties-transformer>
+            </when>
+            <otherwise>
+                <message-properties-transformer doc:name="Set 200 Status">
+                    <add-message-property key="http.status" value="200"/>
+                </message-properties-transformer>
+            </otherwise>
+        </choice>
+        <catch-exception-strategy doc:name="mainCatch_Exception_Strategy">
+            <set-payload value="#[null]" doc:name="Empty Payload"/>
+            <message-properties-transformer doc:name="Set 404 Status">
+                <add-message-property key="http.status" value="404"/>
+            </message-properties-transformer>
+        </catch-exception-strategy>
+
+    </flow>
+    <flow name="MainFlowHttpsGetWsdl">
+        <http:listener config-ref="HTTPS_Listener_Configuration" path="${application.endpoint.path}" allowedMethods="GET" doc:name="HTTPS GET Inbound Main"/>
+        <cxf:jaxws-service serviceClass="OctopusConsortium.Service.MessageEngine" doc:name="CXF"/>
+
+    </flow>
+	<flow name="MainFlowHttpsPost">
+        <http:listener config-ref="HTTPS_Listener_Configuration" path="${application.endpoint.path}" allowedMethods="POST" doc:name="HTTPS POST Inbound Main"/>
+  
+        <!--  
+                <http:inbound-endpoint exchange-pattern="request-response" host="${application.endpoint.host}" port="${application.endpoint.port}" path="${application.endpoint.path}"  doc:name="HTTPS"/>
+                -->
+  
+        <message-filter doc:name="Filter favicon"> 
+            <not-filter> 
+                <wildcard-filter pattern="/favicon.ico" caseSensitive="true"></wildcard-filter>  
+            </not-filter>  
+        </message-filter>  
+        <cxf:jaxws-service configuration-ref="CXF_ConfigurationService" serviceClass="OctopusConsortium.Service.MessageEngine" validationEnabled="true" enableMuleSoapHeaders="false" doc:name="SOAP"> 
+            <cxf:inInterceptors> 
+                <spring:ref bean="BeanLoggingInInterceptor"></spring:ref>  
+                <spring:ref bean="BeanSubmitToCallQueueDobValidationInterceptor"></spring:ref>  
+            </cxf:inInterceptors>  
+            <cxf:outInterceptors> 
+                <spring:ref bean="BeanLoggingOutInterceptor"></spring:ref>  
+            </cxf:outInterceptors>  
+            <cxf:outFaultInterceptors> 
+                <spring:ref bean="outfault"></spring:ref>  
+            </cxf:outFaultInterceptors>  
+        </cxf:jaxws-service>  
+        <logger message="Main flow started. messageObject = #[payload[1].getClass().getName()] - messageid = #[message.id] - ipaddress = #[sessionVars['OriginatingIP']]" level="INFO" category="Engine" doc:name="Logger"></logger>  
+        <set-variable variableName="mstarttime" value="#[System.currentTimeMillis()]" doc:name="set starttime"></set-variable>  
+        <set-variable variableName="messageSent" value="#[payload]" doc:name="Save incoming message"></set-variable>  
+        <flow-ref name="AuthenticateRequest" doc:name="Authenticate"></flow-ref>  
+        <choice doc:name="Choice"> 
+            <when expression="#[payload == true]"> 
+                <set-payload value="#[variable:messageSent]" doc:name="Set Payload to original message"></set-payload>  
+                <flow-ref name="ProcessMessage" doc:name="Process Message"></flow-ref>  
+            </when>  
+            <otherwise> 
+                <scripting:component doc:name="Not Authenticated"> 
+                    <scripting:script engine="Groovy"><![CDATA[throw new java.lang.SecurityException("Invalid Username or password.");]]></scripting:script>  
+                </scripting:component>  
+            </otherwise>  
+        </choice>  
+        <logger message="Main flow executed in: mainElapsed = #[System.currentTimeMillis() - flowVars['mstarttime']]ms. - messageObject = #[flowVars['messageSent'][1].getClass().getName()] - messageid = #[message.id] ]" level="INFO" category="Engine" doc:name="Logger"></logger>  
+        <remove-variable variableName="mstarttime" doc:name="remove starttime"></remove-variable>  
+    </flow>
+    <sub-flow name="AuthenticateRequest"> 
+        <set-payload value="#[payload[0]]" doc:name="Set Payload to authentication tokens"></set-payload>  
+        <custom-transformer class="OctopusConsortium.Core.AuthenticationVerifyTokens" doc:name="Attempt to authenticate"> 
+            <spring:property name="authenticationProviderManager" ref="mainAuthenticationManager"></spring:property>  
+        </custom-transformer>  
+    </sub-flow>
+    <flow name="ProcessMessage"> 
+        <logger message="Processing message" level="TRACE" doc:name="Logger"></logger>  
+        <set-variable variableName="auth" value="#[payload[0]]" doc:name="Save auth data"></set-variable>  
+        <set-payload value="#[payload[1]]" doc:name="Remove authentication tokens from payload"></set-payload>  
+        <flow-ref name="AuthoriseMethod" doc:name="Check authorisation"></flow-ref>  
+        <choice doc:name="Choice"> 
+            <when expression="payload instanceof OctopusConsortium.Service.Models.SubmitEncounterRequest"> 
+                <processor-chain doc:name="[Deprecated] SubmitEncounterRequest">
+                    <scripting:component doc:name="Throw Error Disabled">
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("GP message requests are disabled.");]]></scripting:script>
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.FindServicesRequest"> 
+                <processor-chain doc:name="FindServicesRequest (disabled)"> 
+                    <logger message="Attempt at find services request" level="INFO" category="Engine" doc:name="Logger"></logger>  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.SubmitEncounterToServiceRequest"> 
+                <processor-chain doc:name="SubmitEncounterToServiceRequest"> 
+                    <flow-ref name="itk_submission_main" doc:name="itk_submission_main"></flow-ref>  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.SubmitToCallQueueEnquiryRequest"> 
+                <processor-chain doc:name="SubmitToCallQueueEnquiryRequest"> 
+                    <scripting:component doc:name="Throw Error Disabled"> 
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("Call back requests are disabled.");]]></scripting:script>  
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.SubmitToCallQueueCallbackRequest"> 
+                <processor-chain doc:name="SubmitToCallQueueCallbackRequest"> 
+                    <scripting:component doc:name="Throw Error Disabled"> 
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("Call back requests are disabled.");]]></scripting:script>  
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.CacheOOHAvailabilityRequest"> 
+                <processor-chain doc:name="CacheOOHAvailabilityRequest">
+                    <scripting:component doc:name="Throw Error Disabled">
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("OOH checks are unavailable.");]]></scripting:script>
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.CheckOOHAvailabilityRequest"> 
+                <processor-chain doc:name="CheckOOHAvailabilityRequest">
+                    <scripting:component doc:name="Throw Error Disabled">
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("OOH checks are unavailable.");]]></scripting:script>
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.IdentifyPatientRequest"> 
+                <processor-chain doc:name="IdentifyPatientRequest"> 
+                    <flow-ref name="QuerySpine_MatchPatient" doc:name="Match patient"></flow-ref>  
+                    <flow-ref name="query_dos_getEndpointStatus" doc:name="Get GP Endpoint Status"></flow-ref>  
+                </processor-chain>  
+            </when>  
+            <when expression="payload instanceof OctopusConsortium.Service.Models.IsOOHRequest"> 
+                <processor-chain doc:name="IsOOHRequest">
+                    <scripting:component doc:name="Throw Error Disabled">
+                        <scripting:script engine="Groovy"><![CDATA[throw new OctopusConsortium.Core.InvalidMessageException("OOH checks are unavailable.");]]></scripting:script>
+                    </scripting:component>
+  
+                </processor-chain>  
+            </when>  
+            <otherwise> 
+                <processor-chain doc:name="Unknown Operation"> 
+                    <scripting:component doc:name="Exception"> 
+                        <scripting:script engine="Groovy"><![CDATA[throw new Exception("Unknown operation type")]]></scripting:script>  
+                    </scripting:component>  
+                </processor-chain>  
+            </otherwise>  
+        </choice>  
+    </flow>
+    <sub-flow name="AuthoriseMethod" doc:description="Authorises the request against the requested method to determine if the user has access to the method."> 
+        <logger message="Authorising message" level="TRACE" doc:name="Logger"></logger>  
+        <enricher target="#[flowVars['isAuthed']]" doc:name="Message Enricher"> 
+            <scripting:transformer doc:name="Build and query permissions table"> 
+                <scripting:script engine="Groovy"><![CDATA[def perms = [ ["ROLE_ADMIN": 
+	[OctopusConsortium.Service.Models.SubmitEncounterRequest.class.toString(),
+	OctopusConsortium.Service.Models.FindServicesRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitEncounterToServiceRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitToCallQueueEnquiryRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitToCallQueueCallbackRequest.class.toString(),
+	OctopusConsortium.Service.Models.CacheOOHAvailabilityRequest.class.toString(),
+	OctopusConsortium.Service.Models.CheckOOHAvailabilityRequest.class.toString(),
+	OctopusConsortium.Service.Models.IsOOHRequest.class.toString(),
+	OctopusConsortium.Service.Models.IdentifyPatientRequest.class.toString()]],
+["ROLE_USER":
+	[OctopusConsortium.Service.Models.SubmitEncounterRequest.class.toString(),
+	OctopusConsortium.Service.Models.FindServicesRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitEncounterToServiceRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitToCallQueueEnquiryRequest.class.toString(),
+	OctopusConsortium.Service.Models.SubmitToCallQueueCallbackRequest.class.toString(),
+	OctopusConsortium.Service.Models.CacheOOHAvailabilityRequest.class.toString(),
+	OctopusConsortium.Service.Models.CheckOOHAvailabilityRequest.class.toString(),
+	OctopusConsortium.Service.Models.IsOOHRequest.class.toString(),
+	OctopusConsortium.Service.Models.IdentifyPatientRequest.class.toString()]],
+["ROLE_ANON":
+	[OctopusConsortium.Service.Models.SubmitToCallQueueCallbackRequest.class.toString()]] ]
+
+def authed = false;
+for (role in flowVars['auth'].getRoles()) {
+	def permissions = perms[role.toString()]
+	if (permissions == null) continue
+	for (a in permissions) {
+		for (b in a) {
+			if (payload.getClass().toString().equals(b))
+				authed = true
+		}
+	}
+}
+payload = authed]]></scripting:script>  
+            </scripting:transformer>  
+        </enricher>  
+        <choice doc:name="Choice"> 
+            <when expression="#[flowVars['isAuthed']]"> 
+                <logger message="User authorised" level="TRACE" doc:name="Authorised"></logger>  
+            </when>  
+            <otherwise> 
+                <scripting:transformer doc:name="Unauthorised exception"> 
+                    <scripting:script engine="Groovy"><![CDATA[throw new java.lang.SecurityException("Not authorised to access this method. " + payload.getClass().toString());]]></scripting:script>  
+                </scripting:transformer>  
+            </otherwise>  
+        </choice>  
+    </sub-flow>
+</mule>
