@@ -89,16 +89,19 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     <http:request-config name="HTTP_Request_Configuration_Proxy_Test" protocol="HTTPS" doc:name="HTTP_Request_Configuration_Proxy_Test"> 
         <tcp:client-socket-properties connectionTimeout="30000"></tcp:client-socket-properties>  
         <tls:context enabledProtocols="TLSv1.1, TLSv1.2"> 
-            <tls:trust-store path="111-proxy-test.jks" password="password" type="jks"></tls:trust-store>  
-            <tls:key-store type="jks" path="111-proxy-test.jks" keyPassword="password" password="password"></tls:key-store>  
-        </tls:context>  
+            <tls:trust-store path="${application.gp111.truststorefile}" password="${application.gp111.truststorepassword}" type="jks"></tls:trust-store>  
+            <tls:key-store type="jks" path="${application.gp111.keystorefile}" keyPassword="${application.gp111.keypassword}" password="${application.gp111.keystorepassword}"></tls:key-store>  
+        </tls:context> 
+
     </http:request-config>
     <http:request-config name="HTTPS_Request_Configuration_Proxy_Live" protocol="HTTPS" doc:name="HTTP_Request_Configuration_Proxy_Live" responseTimeout="60000" connectionIdleTimeout="60000">
         <tcp:client-socket-properties connectionTimeout="60000"/>
+
         <tls:context enabledProtocols="TLSv1.1, TLSv1.2">
-            <tls:trust-store path="111-proxy-live.jks" password="gMhu6LfRpYz6cfyVeymes3Qwd" type="jks" />
-            <tls:key-store path="111-proxy-live.jks" keyPassword="gMhu6LfRpYz6cfyVeymes3Qwd" password="gMhu6LfRpYz6cfyVeymes3Qwd"  />
+            <tls:trust-store path="${application.gp111.truststorefile}" password="${application.gp111.truststorepassword}" type="jks" />
+            <tls:key-store path="${application.gp111.keystorefile}" keyPassword="${application.gp111.keypassword}" password="${application.gp111.keystorepassword}"  />
         </tls:context>
+
     </http:request-config>
     <http:request-config name="HTTP_Request_Configuration_HTTP_Test"  doc:name="HTTP_Request_Configuration_HTTP_Test" responseTimeout="60000" connectionIdleTimeout="60000">
         <tcp:client-socket-properties connectionTimeout="60000"/>
