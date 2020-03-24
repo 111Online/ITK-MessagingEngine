@@ -64,7 +64,7 @@ public class CDAHelper {
 		this.commonValues = commonValues;
 	}
 	
-	public static POCDMT000002UK01Informant12 createInformantRelatedEntity(ObjectFactory of, Address homeAddress, OctopusConsortium.Models.CDA.InformantType cdaPersonRelationshipType, String telephoneHome, String telephoneMobile, String informantName)
+	public static POCDMT000002UK01Informant12 createInformantRelatedEntity(ObjectFactory of, Address homeAddress, OctopusConsortium.Models.CDA.InformantType cdaPersonRelationshipType, String telephoneHome, String telephoneMobile, String emailAddress, String informantName)
 	{
 		POCDMT000002UK01Informant12 informant = of.createPOCDMT000002UK01Informant12();
 		informant.getTypeCode().add("INF");
@@ -109,6 +109,15 @@ public class CDAHelper {
 			tel.getUse().add(CsTelecommunicationAddressUse.EC);
 			tel.setValue("tel:" + telephoneHome.replaceAll("\\s+",""));
 			informant.getRelatedEntity().getTelecom().add(tel);
+		}
+		
+		if(emailAddress!=null && !emailAddress.isEmpty()){
+			TEL email = null;
+			
+			email = of.createTEL();
+			email.getUse().add(CsTelecommunicationAddressUse.EC);
+			email.setValue("mailto:" + emailAddress);
+			informant.getRelatedEntity().getTelecom().add(email);
 		}
 		
 		II e = of.createII();
@@ -461,8 +470,9 @@ public class CDAHelper {
 		
 		InformantType cdaInformantType = patient.getInformantType();
 		String informantName = patient.getInformantContactName();
+		String email = patient.getEmailAddress();
 		
-		return createInformantRelatedEntity(of,homeAddress,cdaInformantType,telHome,telMob, informantName);	
+		return createInformantRelatedEntity(of,homeAddress,cdaInformantType,telHome,telMob, email,informantName);	
 	}
 	
 	public POCDMT000002UK01RecordTarget CreateRecordTarget(ObjectFactory of, IITKPatient patient, String externalReference, String journeyId) throws OctopusConsortium.Core.InvalidMessageException {
@@ -526,7 +536,7 @@ public class CDAHelper {
 			patientRole.getTelecom().add(tel);
 		}
 
-		if (patient.getEmailAddress() != null && !patient.getEmailAddress().isEmpty())
+		if (patient.getInformantType() == InformantType.Self && patient.getEmailAddress() != null && !patient.getEmailAddress().isEmpty())
 		{
 			TEL email = null;
 			
