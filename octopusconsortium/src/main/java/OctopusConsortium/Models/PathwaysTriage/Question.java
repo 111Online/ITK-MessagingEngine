@@ -40,6 +40,8 @@ public class Question {
 	private String content;
 	@JsonProperty
 	private String buttonText;
+	@JsonProperty
+	private Long questionType;
 
 	public String getDispositionUrgencyText() {
         return dispositionUrgencyText;
@@ -184,4 +186,12 @@ public class Question {
 	public void setButtonText(String buttonText) {
 		this.buttonText = buttonText;
 	}
+	
+	public Long getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(Long questionType) {
+        this.questionType = questionType;
+    }
 }
