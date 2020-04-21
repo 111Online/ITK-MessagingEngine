@@ -1,1 +1,4 @@
 octopusconsortium/src/main/resources
+octopusconsortium/bin
+
+octopusconsortium/mule-project.xml
