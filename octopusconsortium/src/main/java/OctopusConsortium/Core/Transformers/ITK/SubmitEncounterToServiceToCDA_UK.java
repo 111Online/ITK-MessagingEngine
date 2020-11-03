@@ -169,7 +169,7 @@ public class SubmitEncounterToServiceToCDA_UK extends AbstractMessageTransformer
 			}
 			
 			POCDMT000002UK01ClinicalDocument cda = new POCDMT000002UK01ClinicalDocument();
-			
+	
 			ObjectFactory of = new ObjectFactory();		
 			
 			try {
@@ -188,7 +188,15 @@ public class SubmitEncounterToServiceToCDA_UK extends AbstractMessageTransformer
 				cda.getEffectiveTime().setValue(CDAHelper.ClinicalDocumentEffectiveTimeString());
 				
 				cda.setId(of.createII());
-				cda.getId().setRoot(UUID.randomUUID().toString().toUpperCase());		
+				if(payload.getCaseDetails().getCaseId() != null)
+				{
+					cda.getId().setRoot(UUID.fromString(payload.getCaseDetails().getCaseId()).toString().toUpperCase());
+				}
+				else
+				{
+				cda.getId().setRoot(UUID.randomUUID().toString().toUpperCase());
+				}
+				
 				cda.setMessageType(of.createMessageType());
 				cda.getMessageType().setRoot("2.16.840.1.113883.2.1.3.2.4.18.17");
 				cda.getMessageType().setExtension("POCD_MT200001GB02");		
