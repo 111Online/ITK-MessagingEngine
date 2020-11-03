@@ -733,6 +733,20 @@ public class CDAHelper {
 			csection.getComponent().add(assessmentComponent);
 		}
 		
+		//Appointment Booking secion
+		POCDMT000002UK01Component5 apptBooking = of.createPOCDMT000002UK01Component5();
+		apptBooking.setTypeCode("COMP");
+		apptBooking.setContextConductionInd(true);
+		apptBooking.setContentId(of.createTemplateContent());
+		apptBooking.getContentId().setRoot("2.16.840.1.113883.2.1.3.2.4.18.16");
+		apptBooking.getContentId().setExtension("COCD_TP146246GB01#Section1");
+		apptBooking.setSection(CallQueueHelper.CreateAppointmentBookingSection(of, caseDetails));
+		
+		if (!apptBooking.getSection().getText().getContent().isEmpty()){
+			csection.getComponent().add(apptBooking);
+		}
+		
+		
 		// add entry (original Hasc xml)
 		POCDMT000002UK01Entry entry = createEntry(of,summary);
 		

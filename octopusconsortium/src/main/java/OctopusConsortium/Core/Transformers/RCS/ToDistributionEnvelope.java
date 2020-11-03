@@ -26,6 +26,7 @@ import OctopusConsortium.RepeatCallerServiceV1.ManifestItemType;
 import OctopusConsortium.RepeatCallerServiceV1.ManifestType;
 import OctopusConsortium.RepeatCallerServiceV1.PayloadType;
 import OctopusConsortium.RepeatCallerServiceV1.PayloadsType;
+import OctopusConsortium.Service.Models.SubmitEncounterToServiceRequest;
 
 public class ToDistributionEnvelope extends AbstractMessageTransformer {
 	
@@ -103,6 +104,7 @@ public class ToDistributionEnvelope extends AbstractMessageTransformer {
 					"urn:nhs-itk:interaction:nhs111RepeatCallerSyncQueryResp-v1-0",
 					"application/cda+xml",
 					"",
+					null,
 					0,
 					jax_payload);
 		}
@@ -111,7 +113,7 @@ public class ToDistributionEnvelope extends AbstractMessageTransformer {
 			//TODO if interaction missing throw exception? according to spec it is optional			
 			if(message.getOutboundPropertyNames().contains("interactionId"))
 				interactionId = message.getOutboundProperty("interactionId");
-			
+
 			if(message.getOutboundPropertyNames().contains("recipientId"))
 				recipientId = message.getOutboundProperty("recipientId");
 			
@@ -130,13 +132,14 @@ public class ToDistributionEnvelope extends AbstractMessageTransformer {
 					
 				}
 			}
-			
+		
 			returnObj = createEnvelope(CommonValues.REPEATCALLER_REPORT_SERVICE,
 					CommonValues.REPEATCALLER_REPORT_PROFILE,
 					interactionId,
 					//"application/cda+xml",//mimetype = 
 					"text/xml",
 					recipientODS,
+					null,
 					recipientId,
 					jax_payload);
 		}
@@ -144,7 +147,7 @@ public class ToDistributionEnvelope extends AbstractMessageTransformer {
 		return returnObj;
 	}
 		
-	private DistributionEnvelopeType createEnvelope(String service,String profile,String interactionId, String mimetype, String recipientODS, int recipientId, JAXBElement<?> jax_payload)
+	private DistributionEnvelopeType createEnvelope(String service,String profile,String interactionId, String mimetype, String recipientODS, String customPayloadId, int recipientId, JAXBElement<?> jax_payload)
 	{
 		
 		OctopusConsortium.RepeatCallerServiceV1.ObjectFactory serviceFactory = new OctopusConsortium.RepeatCallerServiceV1.ObjectFactory();
@@ -154,8 +157,14 @@ public class ToDistributionEnvelope extends AbstractMessageTransformer {
 		
 		header.setService(service);
 				
-		PayloadType payloadType = serviceFactory.createPayloadType();		
-		payloadType.setId("uuid_" + UUID.randomUUID().toString().toUpperCase());
+		PayloadType payloadType = serviceFactory.createPayloadType();	
+		if(customPayloadId != null)
+		{
+			payloadType.setId("uuid_" + UUID.fromString(customPayloadId).toString().toUpperCase());
+		}
+		else {
+			payloadType.setId("uuid_" + UUID.randomUUID().toString().toUpperCase());
+		}
 		payloadType.getAny().add(jax_payload);
 		
 		PayloadsType payloads  = serviceFactory.createPayloadsType();

@@ -10,7 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "SubmitToCallQueueDetails", propOrder = {	    
+@XmlType(name = "SubmitToCallQueueDetails", propOrder = {
+		"caseId",
 	    "externalReference",
 	    "journeyId",
 	    "source",
@@ -22,7 +23,8 @@ import javax.xml.bind.annotation.XmlType;
 	    "caseSummaryItems",
 	    "caseStepItems",
 	    "provider",
-	    "unstructuredData"
+	    "unstructuredData",
+	    "appointmentBookingRef"
 	})
 public class SubmitToCallQueueDetails {
 	
@@ -30,6 +32,8 @@ public class SubmitToCallQueueDetails {
 	@XmlElementWrapper(name = "CaseSummary")
 	@XmlElement(name = "SummaryItem", required = true)
 	protected List<OctopusConsortium.Service.Models.DataInstance> caseSummaryItems;	
+	@XmlElement(name = "CaseId", required = false)
+	protected String caseId;
 	@XmlElement(name = "ExternalReference", required = false)
 	protected String externalReference;
 	@XmlElement(name = "JourneyId", required = true)
@@ -50,6 +54,8 @@ public class SubmitToCallQueueDetails {
 	protected String provider;
 	@XmlElement(name = "UnstructuredData", required = false)
 	protected String unstructuredData;
+	@XmlElement(name = "AppointmentBookingRef", required = false)
+	protected String appointmentBookingRef;
 	
 	@XmlElementWrapper(name = "CaseSteps")
 	@XmlElement(name = "StepItem", required = true)
@@ -85,6 +91,24 @@ public class SubmitToCallQueueDetails {
 	public void setExternalReference(String value)
 	{
 		externalReference = value;
+	}
+	
+	public String getCaseId()
+	{
+		return caseId;
+	}
+	public void setCaseId(String value)
+	{
+		caseId = value;
+	}
+	
+	public String getAppointmentBookingRef()
+	{
+		return appointmentBookingRef;
+	}
+	public void setAppointmentBookingRef(String value)
+	{
+		appointmentBookingRef = value;
 	}
 	
 	//deprecated in v2.0.0

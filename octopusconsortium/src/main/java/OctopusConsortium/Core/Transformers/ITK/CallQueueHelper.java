@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBElement;
 import OctopusConsortium.Core.InvalidHascException;
 import OctopusConsortium.Core.Transformers.RCS.CDAHelper;
 import OctopusConsortium.Models.IITKPatient;
+import OctopusConsortium.Models.RCS.StrucDocLinkHtml;
 import OctopusConsortium.Models.RCS.CsNullFlavor;
 import OctopusConsortium.Models.RCS.CsPostalAddressUse;
 import OctopusConsortium.Models.RCS.EN;
@@ -328,5 +329,35 @@ public class CallQueueHelper {
 		}
 		
 		return summaryContent;
+	}
+	
+
+	public static POCDMT000002UK01Section CreateAppointmentBookingSection(ObjectFactory of, SubmitToCallQueueDetails message) throws InvalidHascException
+	{
+		POCDMT000002UK01Section  section = of.createPOCDMT000002UK01Section();
+		
+		section.getClassCode().add("DOCSECT");
+		section.getMoodCode().add("EVN");
+		
+		section.setId(of.createII());
+		section.getId().setRoot(UUID.randomUUID().toString().toUpperCase());
+		
+		II ii = of.createII();
+		section.getTemplateId().add(ii);
+		ii.setRoot("2.16.840.1.113883.2.1.3.2.4.18.2");
+		ii.setExtension("COCD_TP146246GB01#Section1");
+		
+		section.setTitle(of.createST());
+		section.getTitle().setContent("Booked Appointment Information");
+		section.setText(of.createStrucDocText());
+		StrucDocLinkHtml doclink = new StrucDocLinkHtml();
+		if(message.getAppointmentBookingRef() != null && !message.getAppointmentBookingRef().isEmpty())
+		{
+			doclink.setHref(message.getAppointmentBookingRef());
+			section.getText().getContent().add(of.createStrucDocTextLinkHtml(doclink));
+		}
+
+		
+		return section;
 	}
 }
