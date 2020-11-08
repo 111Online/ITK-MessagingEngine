@@ -12,6 +12,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
     
     <sub-flow name="QuerySpine_MatchPatient" >
         <set-variable variableName="pdsstarttime" value="#[System.currentTimeMillis()]" doc:name="PDS Timer"/>
+        <set-session-variable variableName="ITKJourneyId" value="#[payload.getJourneyId()]" doc:name="Save Journey Id"/>
         <flow-ref name="QuerySpine_GetPatientDetails_RequestAndResponse" doc:name="GetPatientDetails"/>
         <logger message="querySpineElapsed = #[System.currentTimeMillis() - flowVars['pdsstarttime']]ms. - messageid = #[message.id]
 " level="DEBUG" doc:name="Logger" category="GetPatientDetails"/>
@@ -37,6 +38,7 @@ payload]]></scripting:text>
 
 
 
+
                         </scripting:script>
                     </scripting:transformer>
                     <logger message="RepeatCallerStatus = #[variable:RepeatCallerStatus]  payload = #[payload]" level="DEBUG" doc:name="Logger" category="GetPatientDetails"/>
@@ -48,6 +50,7 @@ payload]]></scripting:text>
                         <scripting:script engine="Groovy">
                             <scripting:text><![CDATA[payload.setRepeatCallerStatus(OctopusConsortium.Service.Models.RepeatCallerStatus.INSUFFICIENT_INFORMATION);
                                                                                                                                                                                                                                                                                         payload;]]></scripting:text>
+
 
 
 

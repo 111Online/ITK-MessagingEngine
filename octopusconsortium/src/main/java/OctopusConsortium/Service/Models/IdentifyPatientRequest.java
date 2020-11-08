@@ -8,11 +8,20 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "IdentifyPatientRequest")
 public class IdentifyPatientRequest extends PatientDetails {
+	@XmlElement(name = "JourneyId", required = false)
+	protected String journeyId;
 	@XmlElement(name = "Address", required = false)
 	protected String address;
 	@XmlElement(name = "Postcode", required = false)
 	protected String postcode;
 
+	public String getJourneyId() {
+		return journeyId;
+	}
+	public void setJourneyId(String journeyId) {
+		this.journeyId = journeyId;
+	}
+	
 	public String getAddress() {
 		return address;
 	}
