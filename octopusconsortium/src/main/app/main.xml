@@ -145,6 +145,7 @@ newpayload]]></scripting:text>
 
 
 
+
   
                 </scripting:script>  
             </scripting:transformer>  
@@ -158,6 +159,7 @@ newpayload.getErrors().add("Message Transformation Exception : ")
 newpayload.setPatient(new OctopusConsortium.Service.Models.Patient());
 
 newpayload]]></scripting:text>
+
 
 
 
@@ -279,7 +281,8 @@ throw ex;]]></scripting:script>
         <logger message="Processing message" level="TRACE" doc:name="Logger"></logger>  
         <set-variable variableName="auth" value="#[payload[0]]" doc:name="Save auth data"></set-variable>  
         <set-payload value="#[payload[1]]" doc:name="Remove authentication tokens from payload"></set-payload>  
-        <flow-ref name="AuthoriseMethod" doc:name="Check authorisation"></flow-ref>  
+        <flow-ref name="AuthoriseMethod" doc:name="Check authorisation"></flow-ref>
+        <set-session-variable variableName="AuthSource" value="#[flowVars['auth'].getSource()]" doc:name="Save authenticated source"/>  
         <choice doc:name="Choice"> 
             <when expression="payload instanceof OctopusConsortium.Service.Models.SubmitEncounterRequest"> 
                 <processor-chain doc:name="[Deprecated] SubmitEncounterRequest">
