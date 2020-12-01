@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Authentication", propOrder = {
     "username",
-    "password"
+    "password",
+    "source"
 })
 public class Authentication {
 
@@ -40,6 +41,8 @@ public class Authentication {
 	protected String username;
 	@XmlElement(name = "Password", required = true)
 	protected String password;
+	@XmlElement(name = "Source", required = false, type = Integer.class)
+	protected Integer source;
 	@XmlTransient
 	private Collection roles;
 	
@@ -89,6 +92,30 @@ public class Authentication {
      */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	/**
+     * Gets the value of the source property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+	public Integer getSource() {
+		return this.source;
+	}
+	
+	/**
+     * Sets the value of the username property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+	public void setSource(Integer source) {
+		this.source = source;
 	}
 	
 	public void setRoles(Collection roles) {

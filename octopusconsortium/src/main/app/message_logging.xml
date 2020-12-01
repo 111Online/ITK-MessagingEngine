@@ -29,13 +29,20 @@ try {
  }
  
  String ITKJourneyId = message.getSessionProperty('ITKJourneyId');
+ Integer AuthSource = message.getSessionProperty('AuthSource');
  String timestamp = java.time.Instant.now();
  
  connection = (java.sql.Connection) datasource.getConnection();
 
  //SQL injection solution taken from here: https://www.owasp.org/index.php/Preventing_SQL_Injection_in_Java
-
- String insertquery = "EXEC AddMessage ?, ?, ?, ?, ?, ?, ?";
+String insertquery;
+if (AuthSource == null || AuthSource == 0){
+ 	insertquery = "EXEC AddMessage ?, ?, ?, ?, ?, ?, ?";
+}
+else
+{
+   insertquery = "EXEC AddMessageFromSource ?, ?, ?, ?, ?, ?, ?, ?";
+}
 
  java.sql.PreparedStatement stmt = connection.prepareStatement(insertquery);
 
@@ -45,7 +52,10 @@ try {
  stmt.setString(4, message.id.toString());
  stmt.setString(5, timestamp.toString());
  stmt.setString(6, messageRecipient);
- stmt.setString(7, ITKJourneyId);
+ stmt.setString(7, ITKJourneyId); 
+ if (AuthSource != null && AuthSource != 0){
+ 	stmt.setInt(8, AuthSource);
+ }
  
  stmt.executeQuery();
  
